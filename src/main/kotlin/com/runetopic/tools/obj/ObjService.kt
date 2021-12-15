@@ -8,7 +8,7 @@ import org.koin.core.component.inject
 /**
  * @author Jordan Abraham
  */
-class ObjService : KoinComponent {
+object ObjService : KoinComponent {
     private val objStorage by inject<ObjStorage>()
 
     fun all(sorted: Boolean): Set<Obj> {

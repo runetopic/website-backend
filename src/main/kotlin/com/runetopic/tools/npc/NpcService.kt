@@ -8,7 +8,7 @@ import org.koin.core.component.inject
 /**
  * @author Jordan Abraham
  */
-class NpcService : KoinComponent {
+object NpcService : KoinComponent {
     private val npcStorage by inject<NpcStorage>()
 
     fun all(sorted: Boolean): Set<Npc> {

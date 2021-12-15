@@ -19,9 +19,17 @@ import org.koin.ktor.ext.Koin
 /**
  * @author Jordan Abraham
  */
-fun main(args: Array<String>): Unit = EngineMain.main(args)
+fun main(args: Array<String>) = EngineMain.main(args)
 
 fun Application.module(testing: Boolean = false) {
+    installApplication()
+    routing {
+        ObjController(this)
+        NpcController(this)
+    }
+}
+
+fun Application.installApplication() {
     install(DefaultHeaders)
     install(CallLogging)
     install(StatusPages) {
@@ -38,10 +46,5 @@ fun Application.module(testing: Boolean = false) {
         jackson {
             enable(SerializationFeature.INDENT_OUTPUT)
         }
-    }
-
-    routing {
-        ObjController(this)
-        NpcController(this)
     }
 }

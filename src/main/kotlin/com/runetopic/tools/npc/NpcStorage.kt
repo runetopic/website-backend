@@ -5,6 +5,6 @@ import java.util.*
 /**
  * @author Jordan Abraham
  */
-class NpcStorage {
+object NpcStorage {
     val storage = Collections.synchronizedSet(mutableSetOf<Npc>())
 }
