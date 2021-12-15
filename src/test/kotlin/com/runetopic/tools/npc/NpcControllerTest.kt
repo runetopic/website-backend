@@ -21,9 +21,7 @@ class NpcControllerTest {
                     response.status()
                 )
             }
-        }
 
-        withTestApplication({ module(testing = true) }) {
             handleRequest(HttpMethod.Post, "/api/tools/npcs") {
                 addHeader(HttpHeaders.ContentType, "application/json")
                 setBody(jacksonObjectMapper().writeValueAsString(Npc(1, "Hans")))
