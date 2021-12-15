@@ -1,0 +1,11 @@
+package com.runetopic.tools.obj
+
+import org.koin.dsl.module
+
+/**
+ * @author Jordan Abraham
+ */
+fun objModule() = module {
+    single { ObjStorage() }
+    single { ObjService() }
+}
