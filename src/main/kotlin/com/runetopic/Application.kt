@@ -7,6 +7,8 @@ import com.runetopic.tools.npc.NpcController
 import com.runetopic.tools.npc.npcModule
 import com.runetopic.tools.obj.ObjController
 import com.runetopic.tools.obj.objModule
+import com.runetopic.topics.TopicController
+import com.runetopic.topics.topicModule
 import io.ktor.application.*
 import io.ktor.features.*
 import io.ktor.http.*
@@ -24,8 +26,11 @@ fun main(args: Array<String>) = EngineMain.main(args)
 fun Application.module(testing: Boolean = false) {
     installApplication()
     routing {
+        // Tools
         ObjController(this)
         NpcController(this)
+        // Topics
+        TopicController(this)
     }
 }
 
@@ -38,8 +43,11 @@ fun Application.installApplication() {
     }
     install(Koin) {
         modules(
+            // Tools
             objModule(),
-            npcModule()
+            npcModule(),
+            // Topics
+            topicModule()
         )
     }
     install(ContentNegotiation) {

@@ -11,16 +11,16 @@ import org.koin.core.component.inject
 object NpcService : KoinComponent {
     private val npcStorage by inject<NpcStorage>()
 
-    fun all(sorted: Boolean): Set<Npc> {
-        if (npcStorage.storage.isNullOrEmpty()) throw NotFoundException()
-        return when {
-            sorted -> npcStorage.storage.toSortedSet(compareBy { it.id })
-            else -> npcStorage.storage.toSet()
+    fun all(sorted: Boolean): Set<Npc> = with(npcStorage) {
+        if (storage.isNullOrEmpty()) throw NotFoundException()
+        when {
+            sorted -> storage.toSortedSet(compareBy { it.id })
+            else -> storage.toSet()
         }
     }
 
-    fun add(npc: Npc) {
-        if (!npcStorage.storage.add(npc)) {
+    fun add(npc: Npc) = with(npcStorage) {
+        if (!storage.add(npc)) {
             throw InternalServerErrorException()
         }
     }

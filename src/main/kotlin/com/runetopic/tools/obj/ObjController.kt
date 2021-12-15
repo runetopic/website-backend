@@ -19,7 +19,7 @@ class ObjController(
         val objService by inject<ObjService>()
 
         with(routing) {
-            route("/objs") {
+            route("/api/tools/objs") {
                 get {
                     val sorted = call.request.queryParameters["sorted"] == true.toString()
                     call.respond(objService.all(sorted))

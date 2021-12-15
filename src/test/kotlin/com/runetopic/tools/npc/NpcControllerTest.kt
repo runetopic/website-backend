@@ -13,36 +13,18 @@ import kotlin.test.assertEquals
 class NpcControllerTest {
 
     @Test
-    fun `test npcs not found`() {
+    fun `test npc controller`() {
         withTestApplication({ module(testing = true) }) {
-            handleRequest(HttpMethod.Get, "/npcs").apply {
+            handleRequest(HttpMethod.Get, "/api/tools/npcs").apply {
                 assertEquals(
                     HttpStatusCode.NotFound,
                     response.status()
                 )
             }
         }
-    }
 
-    @Test
-    fun `test npc created`() {
         withTestApplication({ module(testing = true) }) {
-            handleRequest(HttpMethod.Post, "/npcs") {
-                addHeader(HttpHeaders.ContentType, "application/json")
-                setBody(jacksonObjectMapper().writeValueAsString(Npc(1, "Hans")))
-            }.apply {
-                assertEquals(
-                    HttpStatusCode.Created,
-                    response.status()
-                )
-            }
-        }
-    }
-
-    @Test
-    fun `test npc exists`() {
-        withTestApplication({ module(testing = true) }) {
-            handleRequest(HttpMethod.Post, "/npcs") {
+            handleRequest(HttpMethod.Post, "/api/tools/npcs") {
                 addHeader(HttpHeaders.ContentType, "application/json")
                 setBody(jacksonObjectMapper().writeValueAsString(Npc(1, "Hans")))
             }.apply {
@@ -52,7 +34,7 @@ class NpcControllerTest {
                 )
             }
 
-            handleRequest(HttpMethod.Get, "/npcs").apply {
+            handleRequest(HttpMethod.Get, "/api/tools/npcs").apply {
                 with(jacksonObjectMapper().readValue(response.content, Array<Npc>::class.java).first()) {
                     assertEquals(1, id)
                     assertEquals("Hans", name)

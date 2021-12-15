@@ -13,36 +13,16 @@ import kotlin.test.assertEquals
 class ObjControllerTest {
 
     @Test
-    fun `test objs not found`() {
+    fun `test obj controller`() {
         withTestApplication({ module(testing = true) }) {
-            handleRequest(HttpMethod.Get, "/objs").apply {
+            handleRequest(HttpMethod.Get, "/api/tools/objs").apply {
                 assertEquals(
                     HttpStatusCode.NotFound,
                     response.status()
                 )
             }
-        }
-    }
 
-    @Test
-    fun `test obj created`() {
-        withTestApplication({ module(testing = true) }) {
-            handleRequest(HttpMethod.Post, "/objs") {
-                addHeader(HttpHeaders.ContentType, "application/json")
-                setBody(jacksonObjectMapper().writeValueAsString(Obj(4151, "Abyssal Whip")))
-            }.apply {
-                assertEquals(
-                    HttpStatusCode.Created,
-                    response.status()
-                )
-            }
-        }
-    }
-
-    @Test
-    fun `test obj exists`() {
-        withTestApplication({ module(testing = true) }) {
-            handleRequest(HttpMethod.Post, "/objs") {
+            handleRequest(HttpMethod.Post, "/api/tools/objs") {
                 addHeader(HttpHeaders.ContentType, "application/json")
                 setBody(jacksonObjectMapper().writeValueAsString(Obj(4151, "Abyssal Whip")))
             }.apply {
@@ -52,7 +32,7 @@ class ObjControllerTest {
                 )
             }
 
-            handleRequest(HttpMethod.Get, "/objs").apply {
+            handleRequest(HttpMethod.Get, "/api/tools/objs").apply {
                 with(jacksonObjectMapper().readValue(response.content, Array<Obj>::class.java).first()) {
                     assertEquals(4151, id)
                     assertEquals("Abyssal Whip", name)

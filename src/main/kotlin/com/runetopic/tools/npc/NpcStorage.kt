@@ -6,5 +6,5 @@ import java.util.*
  * @author Jordan Abraham
  */
 object NpcStorage {
-    val storage = Collections.synchronizedSet(mutableSetOf<Npc>())
+    val storage = Collections.synchronizedList(mutableListOf<Npc>())
 }

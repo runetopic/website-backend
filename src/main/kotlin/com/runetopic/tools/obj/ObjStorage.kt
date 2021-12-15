@@ -6,5 +6,5 @@ import java.util.*
  * @author Jordan Abraham
  */
 object ObjStorage {
-    val storage = Collections.synchronizedSet(mutableSetOf<Obj>())
+    val storage = Collections.synchronizedList(mutableListOf<Obj>())
 }

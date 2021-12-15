@@ -11,16 +11,16 @@ import org.koin.core.component.inject
 object ObjService : KoinComponent {
     private val objStorage by inject<ObjStorage>()
 
-    fun all(sorted: Boolean): Set<Obj> {
-        if (objStorage.storage.isNullOrEmpty()) throw NotFoundException()
-        return when {
-            sorted -> objStorage.storage.toSortedSet(compareBy { it.id })
-            else -> objStorage.storage.toSet()
+    fun all(sorted: Boolean): Set<Obj> = with(objStorage) {
+        if (storage.isNullOrEmpty()) throw NotFoundException()
+        when {
+            sorted -> storage.toSortedSet(compareBy { it.id })
+            else -> storage.toSet()
         }
     }
 
-    fun add(obj: Obj) {
-        if (!objStorage.storage.add(obj)) {
+    fun add(obj: Obj) = with(objStorage) {
+        if (!storage.add(obj)) {
             throw InternalServerErrorException()
         }
     }

@@ -19,7 +19,7 @@ class NpcController(
         val npcService by inject<NpcService>()
 
         with(routing) {
-            route("/npcs") {
+            route("/api/tools/npcs") {
                 get {
                     val sorted = call.request.queryParameters["sorted"] == true.toString()
                     call.respond(npcService.all(sorted))
