@@ -1,8 +1,7 @@
-package com.runetopic.tools.obj
+package com.runetopic.tools.npc
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.runetopic.module
-import com.runetopic.tools.npc.Npc
 import io.ktor.http.*
 import io.ktor.server.testing.*
 import kotlin.test.Test
