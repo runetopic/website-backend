@@ -10,8 +10,9 @@ import java.util.*
 
 fun Application.installJWT() {
     install(Authentication) {
+        val secret = environment.config.property("jwt.secret").getString()
         jwt(Authentications.LOGGED_IN) {
-            verifier(JWT.require(Algorithm.HMAC256(System.getenv("JWT_SECRET"))).build())
+            verifier(JWT.require(Algorithm.HMAC256(secret)).build())
             validate {
                 when {
                     it.payload.getClaim("username").asString() != "" -> JWTPrincipal(it.payload)
