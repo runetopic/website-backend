@@ -14,9 +14,7 @@ application {
     mainClass.set("com.runetopic.ApplicationKt")
 }
 
-repositories {
-    mavenCentral()
-}
+repositories(RepositoryHandler::mavenCentral)
 
 dependencies {
     implementation(kotlin("stdlib"))
@@ -26,7 +24,7 @@ dependencies {
     implementation("io.ktor:ktor-auth-jwt:$ktorVersion")
     implementation("io.ktor:ktor-serialization:$ktorVersion")
     implementation("io.ktor:ktor-jackson:$ktorVersion")
-    implementation("ch.qos.logback:logback-classic:1.2.7")
+    implementation("ch.qos.logback:logback-classic:1.2.8")
 
     implementation("io.insert-koin:koin-core:$koinVersion")
     implementation("io.insert-koin:koin-ktor:$koinVersion")
