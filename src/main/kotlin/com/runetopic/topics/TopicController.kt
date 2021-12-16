@@ -1,5 +1,6 @@
 package com.runetopic.topics
 
+import com.runetopic.Authentications
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.http.*
@@ -21,7 +22,7 @@ class TopicController(
         val topicService by inject<TopicService>()
 
         with(routing) {
-            authenticate("logged-in") {
+            authenticate(Authentications.LOGGED_IN) {
                 route("/api/topics") {
                     get { call.respond(topicService.all()) }
                     post {
@@ -33,7 +34,7 @@ class TopicController(
                 route("/api/topics/{id}") {
                     get {
                         val id = UUID.fromString(call.parameters["id"])
-                        call.respond(topicService.one(id))
+                        call.respond(HttpStatusCode.OK, topicService.one(id))
                     }
                     put {
                         val id = UUID.fromString(call.parameters["id"])
@@ -42,7 +43,7 @@ class TopicController(
                             Topic(id, title, description, markdown, private)
                         }
                         topicService.update(id, topic)
-                        call.respond(HttpStatusCode.Accepted)
+                        call.respond(HttpStatusCode.Accepted, topic)
                     }
                 }
             }

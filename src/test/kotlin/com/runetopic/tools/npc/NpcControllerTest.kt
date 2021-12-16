@@ -1,6 +1,7 @@
 package com.runetopic.tools.npc
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.runetopic.jwt.loginToken
 import com.runetopic.module
 import io.ktor.http.*
 import io.ktor.server.testing.*
@@ -15,7 +16,9 @@ class NpcControllerTest {
     @Test
     fun `test npc controller`() {
         withTestApplication({ module(testing = true) }) {
-            handleRequest(HttpMethod.Get, "/api/tools/npcs").apply {
+            handleRequest(HttpMethod.Get, "/api/tools/npcs") {
+                addHeader("Authorization", "Bearer ${loginToken("test")}")
+            }.apply {
                 assertEquals(
                     HttpStatusCode.NotFound,
                     response.status()
@@ -23,6 +26,7 @@ class NpcControllerTest {
             }
 
             handleRequest(HttpMethod.Post, "/api/tools/npcs") {
+                addHeader("Authorization", "Bearer ${loginToken("test")}")
                 addHeader(HttpHeaders.ContentType, "application/json")
                 setBody(jacksonObjectMapper().writeValueAsString(Npc(1, "Hans")))
             }.apply {
@@ -32,7 +36,9 @@ class NpcControllerTest {
                 )
             }
 
-            handleRequest(HttpMethod.Get, "/api/tools/npcs").apply {
+            handleRequest(HttpMethod.Get, "/api/tools/npcs") {
+                addHeader("Authorization", "Bearer ${loginToken("test")}")
+            }.apply {
                 with(jacksonObjectMapper().readValue(response.content, Array<Npc>::class.java).first()) {
                     assertEquals(1, id)
                     assertEquals("Hans", name)

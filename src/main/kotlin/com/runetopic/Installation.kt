@@ -4,7 +4,9 @@ import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.runetopic.exception.InternalServerErrorException
+import com.runetopic.exception.InvalidUsernameOrPasswordException
 import com.runetopic.exception.NotFoundException
+import com.runetopic.exception.UsernameExistsException
 import com.runetopic.tools.npc.npcModule
 import com.runetopic.tools.obj.objModule
 import com.runetopic.topics.topicModule
@@ -29,6 +31,8 @@ fun Application.installStatusPages() {
     install(StatusPages) {
         exception<NotFoundException> { call.respond(HttpStatusCode.NotFound) }
         exception<InternalServerErrorException> { call.respond(HttpStatusCode.InternalServerError) }
+        exception<InvalidUsernameOrPasswordException> { call.respond(HttpStatusCode.Forbidden, "Invalid username and/or password.") }
+        exception<UsernameExistsException> { call.respond(HttpStatusCode.Forbidden, "An account with that username already exists.") }
     }
 }
 
@@ -42,8 +46,8 @@ fun Application.installJackson() {
 
 fun Application.installJWT() {
     install(Authentication) {
-        jwt("logged-in") {
-            verifier(JWT.require(Algorithm.HMAC256(System.getenv("JWT-SECRET"))).build())
+        jwt(Authentications.LOGGED_IN) {
+            verifier(JWT.require(Algorithm.HMAC256(System.getenv("JWT_SECRET"))).build())
             validate {
                 when {
                     it.payload.getClaim("username").asString() != "" -> JWTPrincipal(it.payload)

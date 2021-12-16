@@ -1,6 +1,7 @@
 package com.runetopic.tools.obj
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.runetopic.jwt.loginToken
 import com.runetopic.module
 import io.ktor.http.*
 import io.ktor.server.testing.*
@@ -15,7 +16,9 @@ class ObjControllerTest {
     @Test
     fun `test obj controller`() {
         withTestApplication({ module(testing = true) }) {
-            handleRequest(HttpMethod.Get, "/api/tools/objs").apply {
+            handleRequest(HttpMethod.Get, "/api/tools/objs") {
+                addHeader("Authorization", "Bearer ${loginToken("test")}")
+            }.apply {
                 assertEquals(
                     HttpStatusCode.NotFound,
                     response.status()
@@ -23,6 +26,7 @@ class ObjControllerTest {
             }
 
             handleRequest(HttpMethod.Post, "/api/tools/objs") {
+                addHeader("Authorization", "Bearer ${loginToken("test")}")
                 addHeader(HttpHeaders.ContentType, "application/json")
                 setBody(jacksonObjectMapper().writeValueAsString(Obj(4151, "Abyssal Whip")))
             }.apply {
@@ -32,7 +36,9 @@ class ObjControllerTest {
                 )
             }
 
-            handleRequest(HttpMethod.Get, "/api/tools/objs").apply {
+            handleRequest(HttpMethod.Get, "/api/tools/objs") {
+                addHeader("Authorization", "Bearer ${loginToken("test")}")
+            }.apply {
                 with(jacksonObjectMapper().readValue(response.content, Array<Obj>::class.java).first()) {
                     assertEquals(4151, id)
                     assertEquals("Abyssal Whip", name)

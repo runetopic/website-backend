@@ -1,6 +1,7 @@
 package com.runetopic.registration
 
 import com.runetopic.exception.InternalServerErrorException
+import com.runetopic.exception.UsernameExistsException
 import com.runetopic.user.User
 import com.runetopic.user.UserService
 import io.ktor.application.*
@@ -25,9 +26,7 @@ class RegistrationController(
             route("/api/register") {
                 post {
                     val registration = call.receive<RegistrationInformation>()
-                    if (userService.exists(registration.username)) {
-                        throw InternalServerErrorException()
-                    }
+                    if (userService.exists(registration.username)) throw UsernameExistsException()
                     val user = User(
                         registration.username,
                         registration.password,

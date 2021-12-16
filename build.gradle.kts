@@ -36,6 +36,7 @@ tasks.withType<Test> {
     dependencies {
         testImplementation("org.jetbrains.kotlin:kotlin-test")
         testImplementation("io.ktor:ktor-server-test-host:$ktorVersion")
+        testImplementation("io.mockk:mockk:1.12.1")
     }
 }
 

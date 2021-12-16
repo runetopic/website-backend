@@ -1,5 +1,6 @@
 package com.runetopic.tools.obj
 
+import com.runetopic.Authentications
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.http.*
@@ -20,7 +21,7 @@ class ObjController(
         val objService by inject<ObjService>()
 
         with(routing) {
-            authenticate("logged-in") {
+            authenticate(Authentications.LOGGED_IN) {
                 route("/api/tools/objs") {
                     get {
                         val sorted = call.request.queryParameters["sorted"] == true.toString()
