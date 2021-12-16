@@ -7,12 +7,14 @@ import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.auth.jwt.*
 import java.util.*
+import javax.crypto.SecretKey
 
 fun Application.installJWT() {
+
+
     install(Authentication) {
-        val secret = environment.config.property("jwt.secret").getString()
         jwt(Authentications.LOGGED_IN) {
-            verifier(JWT.require(Algorithm.HMAC256(secret)).build())
+            verifier(JWT.require(Algorithm.HMAC256(environment.config.property("jwt.secret").getString())).build())
             validate {
                 when {
                     it.payload.getClaim("username").asString() != "" -> JWTPrincipal(it.payload)
@@ -24,7 +26,7 @@ fun Application.installJWT() {
     }
 }
 
-fun loginToken(username: String): String = JWT.create()
+fun loginToken(username: String, secretKey: String): String = JWT.create()
     .withClaim("username", username)
     .withExpiresAt(Date(System.currentTimeMillis() + 604_800_000)) // 7 Days
-    .sign(Algorithm.HMAC256(System.getenv("JWT_SECRET")))
+    .sign(Algorithm.HMAC256(secretKey))
