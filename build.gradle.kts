@@ -22,7 +22,8 @@ dependencies {
     implementation(kotlin("stdlib"))
     implementation("io.ktor:ktor-server-core:$ktorVersion")
     implementation("io.ktor:ktor-server-netty:$ktorVersion")
-
+    implementation("io.ktor:ktor-auth:$ktorVersion")
+    implementation("io.ktor:ktor-auth-jwt:$ktorVersion")
     implementation("io.ktor:ktor-serialization:$ktorVersion")
     implementation("io.ktor:ktor-jackson:$ktorVersion")
     implementation("ch.qos.logback:logback-classic:1.2.7")

@@ -1,6 +1,7 @@
 package com.runetopic.tools.npc
 
 import io.ktor.application.*
+import io.ktor.auth.*
 import io.ktor.http.*
 import io.ktor.request.*
 import io.ktor.response.*
@@ -19,15 +20,17 @@ class NpcController(
         val npcService by inject<NpcService>()
 
         with(routing) {
-            route("/api/tools/npcs") {
-                get {
-                    val sorted = call.request.queryParameters["sorted"] == true.toString()
-                    call.respond(npcService.all(sorted))
-                }
-                post {
-                    val npc = call.receive<Npc>()
-                    npcService.add(npc)
-                    call.respond(HttpStatusCode.Created)
+            authenticate("logged-in") {
+                route("/api/tools/npcs") {
+                    get {
+                        val sorted = call.request.queryParameters["sorted"] == true.toString()
+                        call.respond(npcService.all(sorted))
+                    }
+                    post {
+                        val npc = call.receive<Npc>()
+                        npcService.add(npc)
+                        call.respond(HttpStatusCode.Created)
+                    }
                 }
             }
         }

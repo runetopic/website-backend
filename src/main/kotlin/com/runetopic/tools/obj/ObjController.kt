@@ -1,6 +1,7 @@
 package com.runetopic.tools.obj
 
 import io.ktor.application.*
+import io.ktor.auth.*
 import io.ktor.http.*
 import io.ktor.request.*
 import io.ktor.response.*
@@ -19,15 +20,17 @@ class ObjController(
         val objService by inject<ObjService>()
 
         with(routing) {
-            route("/api/tools/objs") {
-                get {
-                    val sorted = call.request.queryParameters["sorted"] == true.toString()
-                    call.respond(objService.all(sorted))
-                }
-                post {
-                    val obj = call.receive<Obj>()
-                    objService.add(obj)
-                    call.respond(HttpStatusCode.Created)
+            authenticate("logged-in") {
+                route("/api/tools/objs") {
+                    get {
+                        val sorted = call.request.queryParameters["sorted"] == true.toString()
+                        call.respond(objService.all(sorted))
+                    }
+                    post {
+                        val obj = call.receive<Obj>()
+                        objService.add(obj)
+                        call.respond(HttpStatusCode.Created)
+                    }
                 }
             }
         }
