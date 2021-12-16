@@ -1,16 +1,15 @@
 package com.runetopic.tools.obj
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.runetopic.jwt.loginToken
+import com.runetopic.api.tools.obj.Obj
+import com.runetopic.api.tools.obj.ObjStorage
 import com.runetopic.module
-import com.runetopic.tools.npc.NpcStorage
+import com.runetopic.plugins.loginToken
 import io.ktor.application.*
 import io.ktor.http.*
 import io.ktor.server.testing.*
 import io.mockk.*
-import org.koin.core.context.stopKoin
 import org.koin.ktor.ext.inject
-import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals

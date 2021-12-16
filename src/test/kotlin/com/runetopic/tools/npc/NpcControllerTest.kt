@@ -1,8 +1,10 @@
 package com.runetopic.tools.npc
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.runetopic.jwt.loginToken
+import com.runetopic.api.tools.npc.Npc
+import com.runetopic.api.tools.npc.NpcStorage
 import com.runetopic.module
+import com.runetopic.plugins.loginToken
 import io.ktor.application.*
 import io.ktor.http.*
 import io.ktor.server.testing.*

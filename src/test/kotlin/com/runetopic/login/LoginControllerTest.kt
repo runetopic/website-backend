@@ -1,6 +1,7 @@
 package com.runetopic.login
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.runetopic.api.login.LoginCredentials
 import com.runetopic.module
 import io.ktor.application.*
 import io.ktor.http.*

@@ -1,8 +1,10 @@
 package com.runetopic.topics
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.runetopic.jwt.loginToken
+import com.runetopic.api.topics.Topic
+import com.runetopic.api.topics.TopicStorage
 import com.runetopic.module
+import com.runetopic.plugins.loginToken
 import io.ktor.application.*
 import io.ktor.http.*
 import io.ktor.server.testing.*
