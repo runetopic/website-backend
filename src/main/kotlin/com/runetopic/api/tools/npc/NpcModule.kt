@@ -1,4 +1,4 @@
-package com.runetopic.tools.npc
+package com.runetopic.api.tools.npc
 
 import org.koin.dsl.module
 

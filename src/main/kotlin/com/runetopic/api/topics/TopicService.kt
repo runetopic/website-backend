@@ -1,4 +1,4 @@
-package com.runetopic.topics
+package com.runetopic.api.topics
 
 import com.runetopic.exception.InternalServerErrorException
 import com.runetopic.exception.NotFoundException

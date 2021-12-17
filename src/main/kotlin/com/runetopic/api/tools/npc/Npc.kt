@@ -1,4 +1,4 @@
-package com.runetopic.tools.npc
+package com.runetopic.api.tools.npc
 
 /**
  * @author Jordan Abraham

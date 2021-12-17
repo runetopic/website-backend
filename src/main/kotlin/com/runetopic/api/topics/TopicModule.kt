@@ -1,4 +1,4 @@
-package com.runetopic.topics
+package com.runetopic.api.topics
 
 import org.koin.dsl.module
 

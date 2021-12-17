@@ -1,4 +1,4 @@
-package com.runetopic.tools.npc
+package com.runetopic.api.tools.npc
 
 import com.runetopic.exception.InternalServerErrorException
 import com.runetopic.exception.NotFoundException

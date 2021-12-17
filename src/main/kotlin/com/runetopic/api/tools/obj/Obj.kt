@@ -1,4 +1,4 @@
-package com.runetopic.tools.obj
+package com.runetopic.api.tools.obj
 
 /**
  * @author Jordan Abraham
