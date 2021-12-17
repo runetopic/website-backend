@@ -16,5 +16,7 @@ fun Application.installCors() {
         allowCredentials = true
         allowSameOrigin = true
         host("localhost:3000", listOf("http", "https")) // frontendHost might be "*"
+        host("runetopic.com", listOf("http", "https")) // frontendHost might be "*"
+        host("www.runetopic.com", listOf("http", "https")) // frontendHost might be "*"
     }
 }
