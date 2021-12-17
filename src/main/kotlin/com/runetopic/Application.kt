@@ -2,7 +2,7 @@ package com.runetopic
 
 import com.runetopic.plugins.*
 import com.runetopic.plugins.routing.configureRouting
-import installCors
+import com.runetopic.plugins.installCors
 import io.ktor.application.*
 import io.ktor.server.netty.*
 

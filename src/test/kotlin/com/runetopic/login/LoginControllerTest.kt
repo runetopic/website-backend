@@ -1,6 +1,7 @@
 package com.runetopic.login
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.runetopic.TestEnvironment
 import com.runetopic.api.login.LoginCredentials
 import com.runetopic.module
 import io.ktor.application.*
@@ -17,7 +18,7 @@ import kotlin.test.assertEquals
 class LoginControllerTest {
 
     @Test
-    fun `test login user does not exist`() = withTestApplication(Application::module) {
+    fun `test login user does not exist`() = withTestApplication(TestEnvironment) {
         val credentials = mockk<LoginCredentials>()
         every { credentials.username } returns "Jordan"
         every { credentials.password } returns "passwordtest"

@@ -10,8 +10,6 @@ import java.util.*
 import javax.crypto.SecretKey
 
 fun Application.installJWT() {
-
-
     install(Authentication) {
         jwt(Authentications.LOGGED_IN) {
             verifier(JWT.require(Algorithm.HMAC256(environment.config.property("jwt.secret").getString())).build())

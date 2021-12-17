@@ -1,6 +1,8 @@
 package com.runetopic.topics
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.runetopic.TestEnvironment
+import com.runetopic.TestEnvironment.TEST_KEY
 import com.runetopic.api.topics.Topic
 import com.runetopic.api.topics.TopicStorage
 import com.runetopic.module
@@ -25,28 +27,28 @@ import kotlin.test.assertNotEquals
 class TopicControllerTest {
 
     @BeforeTest
-    fun `clear topic storage`() = withTestApplication(Application::module) {
+    fun `clear topic storage`() = withTestApplication(TestEnvironment) {
         with(application.inject<TopicStorage>()) { value.storage.clear() }
     }
 
     @Test
-    fun `test not authorized`() = withTestApplication(Application::module) {
+    fun `test not authorized`() = withTestApplication(TestEnvironment) {
         with(handleRequest(HttpMethod.Get, "/api/topics")) {
             assertEquals(HttpStatusCode.Unauthorized, response.status())
         }
     }
 
     @Test
-    fun `test get topics empty`() = withTestApplication(Application::module) {
+    fun `test get topics empty`() = withTestApplication(TestEnvironment) {
         with(handleRequest(HttpMethod.Get, "/api/topics") {
-            addHeader("Authorization", "Bearer ${loginToken("test")}")
+            addHeader("Authorization", "Bearer ${loginToken("test", TEST_KEY)}")
         }) {
             assertEquals(HttpStatusCode.NotFound, response.status())
         }
     }
 
     @Test
-    fun `test post npc`() = withTestApplication(Application::module) {
+    fun `test post npc`() = withTestApplication(TestEnvironment) {
         val topic = mockk<Topic>()
         every { topic.id } returns UUID.randomUUID()
         every { topic.title } returns "Test Title"
@@ -55,7 +57,7 @@ class TopicControllerTest {
         every { topic.private } returns false
 
         with(handleRequest(HttpMethod.Post, "/api/topics") {
-            addHeader("Authorization", "Bearer ${loginToken("test")}")
+            addHeader("Authorization", "Bearer ${loginToken("test", TEST_KEY)}")
             addHeader(HttpHeaders.ContentType, "application/json")
             setBody(jacksonObjectMapper().writeValueAsString(topic))
         }) {
@@ -66,7 +68,7 @@ class TopicControllerTest {
     }
 
     @Test
-    fun `test get topics`() = withTestApplication(Application::module) {
+    fun `test get topics`() = withTestApplication(TestEnvironment) {
         val topic = mockk<Topic>()
         every { topic.id } returns UUID.randomUUID()
         every { topic.title } returns "Test Title"
@@ -75,7 +77,7 @@ class TopicControllerTest {
         every { topic.private } returns false
 
         with(handleRequest(HttpMethod.Post, "/api/topics") {
-            addHeader("Authorization", "Bearer ${loginToken("test")}")
+            addHeader("Authorization", "Bearer ${loginToken("test", TEST_KEY)}")
             addHeader(HttpHeaders.ContentType, "application/json")
             setBody(jacksonObjectMapper().writeValueAsString(topic))
         }) {
@@ -85,7 +87,7 @@ class TopicControllerTest {
         confirmVerified()
 
         with(handleRequest(HttpMethod.Get, "/api/topics/${topic.id}") {
-            addHeader("Authorization", "Bearer ${loginToken("test")}")
+            addHeader("Authorization", "Bearer ${loginToken("test", TEST_KEY)}")
         }) {
             assertEquals(jacksonObjectMapper().readValue(response.content, Topic::class.java), topic)
             assertEquals(HttpStatusCode.OK, response.status())
@@ -95,7 +97,7 @@ class TopicControllerTest {
         confirmVerified()
 
         with(handleRequest(HttpMethod.Put, "/api/topics/${topic.id}") {
-            addHeader("Authorization", "Bearer ${loginToken("test")}")
+            addHeader("Authorization", "Bearer ${loginToken("test", TEST_KEY)}")
             addHeader(HttpHeaders.ContentType, "application/json")
             setBody(
                 jacksonObjectMapper().writeValueAsString(

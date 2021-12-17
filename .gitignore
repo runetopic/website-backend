@@ -3,3 +3,4 @@ build/
 !.gitignore
 !.github/workflows/build.yml
 src/main/resources/application.conf
+/src/test/resources/application.conf

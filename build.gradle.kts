@@ -6,11 +6,20 @@ val koin_version: String by project
 plugins {
     kotlin("jvm") version "1.6.10"
     kotlin("plugin.serialization") version "1.6.10"
+    id("com.github.johnrengelman.shadow") version "7.0.0"
     application
 }
 
 group = "com.runetopic.website"
 version = "1.0.0-SNAPSHOT"
+
+tasks{
+    shadowJar {
+        manifest {
+            attributes(Pair("Main-Class", "com.runetopic.ApplicationKt"))
+        }
+    }
+}
 
 application {
     mainClass.set("com.runetopic.ApplicationKt")
