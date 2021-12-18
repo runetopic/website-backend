@@ -43,12 +43,13 @@ class TopicControllerTest {
         with(handleRequest(HttpMethod.Get, "/api/topics") {
             addHeader("Authorization", "Bearer ${loginToken("test", TEST_KEY)}")
         }) {
-            assertEquals(HttpStatusCode.NotFound, response.status())
+            assertEquals(HttpStatusCode.OK, response.status())
+            assertEquals("[ ]", response.content)
         }
     }
 
     @Test
-    fun `test post npc`() = withTestApplication(TestEnvironment) {
+    fun `test post topic`() = withTestApplication(TestEnvironment) {
         val topic = mockk<Topic>()
         every { topic.id } returns UUID.randomUUID()
         every { topic.title } returns "Test Title"
