@@ -22,7 +22,7 @@ fun Application.configureTopicRouting() {
             post("/api/topics") {
                 val topic = call.receive<Topic>()
                 topicService.add(topic)
-                call.respond(HttpStatusCode.Created)
+                call.respond(HttpStatusCode.Created, topic)
             }
 
             get("/api/topics/{id}") {
