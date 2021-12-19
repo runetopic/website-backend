@@ -17,17 +17,16 @@ fun Application.configureTopicRouting() {
     val topicService by inject<TopicService>()
 
     routing {
+        get("/api/topics") { call.respond(topicService.all()) }
+        get("/api/topics/{id}") {
+            val id = UUID.fromString(call.parameters["id"])
+            call.respond(HttpStatusCode.OK, topicService.one(id))
+        }
         authenticate(Authentications.LOGGED_IN) {
-            get("/api/topics") { call.respond(topicService.all()) }
             post("/api/topics") {
                 val topic = call.receive<Topic>()
                 topicService.add(topic)
                 call.respond(HttpStatusCode.Created, topic)
-            }
-
-            get("/api/topics/{id}") {
-                val id = UUID.fromString(call.parameters["id"])
-                call.respond(HttpStatusCode.OK, topicService.one(id))
             }
             put("/api/topics/{id}") {
                 val id = UUID.fromString(call.parameters["id"])
