@@ -6,5 +6,5 @@ import java.util.*
  * @author Jordan Abraham
  */
 object UserStorage {
-    val storage = Collections.synchronizedList(mutableListOf<User>())
+    val storage: MutableList<User> = Collections.synchronizedList(mutableListOf<User>())
 }

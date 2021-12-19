@@ -6,6 +6,7 @@ import io.ktor.application.*
  * @author Jordan Abraham
  */
 fun Application.configureRouting() {
+    configureUserRouting()
     configureRegistrationRouting()
     configureNpcRouting()
     configureTopicRouting()
