@@ -32,13 +32,6 @@ class TopicControllerTest {
     }
 
     @Test
-    fun `test not authorized`() = withTestApplication(TestEnvironment) {
-        with(handleRequest(HttpMethod.Get, "/api/topics")) {
-            assertEquals(HttpStatusCode.Unauthorized, response.status())
-        }
-    }
-
-    @Test
     fun `test get topics empty`() = withTestApplication(TestEnvironment) {
         with(handleRequest(HttpMethod.Get, "/api/topics") {
             addHeader("Authorization", "Bearer ${loginToken("test", TEST_KEY)}")
