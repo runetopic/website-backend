@@ -5,7 +5,6 @@ import com.runetopic.TestEnvironment
 import com.runetopic.TestEnvironment.TEST_KEY
 import com.runetopic.api.topics.Topic
 import com.runetopic.api.topics.TopicStorage
-import com.runetopic.module
 import com.runetopic.plugins.loginToken
 import io.ktor.application.*
 import io.ktor.http.*
@@ -33,9 +32,11 @@ class TopicControllerTest {
 
     @Test
     fun `test get topics empty`() = withTestApplication(TestEnvironment) {
-        with(handleRequest(HttpMethod.Get, "/api/topics") {
-            addHeader("Authorization", "Bearer ${loginToken("test", TEST_KEY)}")
-        }) {
+        with(
+            handleRequest(HttpMethod.Get, "/api/topics") {
+                addHeader("Authorization", "Bearer ${loginToken("test", TEST_KEY)}")
+            }
+        ) {
             assertEquals(HttpStatusCode.OK, response.status())
             assertEquals("[ ]", response.content)
         }
@@ -50,11 +51,13 @@ class TopicControllerTest {
         every { topic.markdown } returns "<h1></h1>"
         every { topic.private } returns false
 
-        with(handleRequest(HttpMethod.Post, "/api/topics") {
-            addHeader("Authorization", "Bearer ${loginToken("test", TEST_KEY)}")
-            addHeader(HttpHeaders.ContentType, "application/json")
-            setBody(jacksonObjectMapper().writeValueAsString(topic))
-        }) {
+        with(
+            handleRequest(HttpMethod.Post, "/api/topics") {
+                addHeader("Authorization", "Bearer ${loginToken("test", TEST_KEY)}")
+                addHeader(HttpHeaders.ContentType, "application/json")
+                setBody(jacksonObjectMapper().writeValueAsString(topic))
+            }
+        ) {
             assertEquals(HttpStatusCode.Created, response.status())
         }
 
@@ -70,19 +73,23 @@ class TopicControllerTest {
         every { topic.markdown } returns "<h1></h1>"
         every { topic.private } returns false
 
-        with(handleRequest(HttpMethod.Post, "/api/topics") {
-            addHeader("Authorization", "Bearer ${loginToken("test", TEST_KEY)}")
-            addHeader(HttpHeaders.ContentType, "application/json")
-            setBody(jacksonObjectMapper().writeValueAsString(topic))
-        }) {
+        with(
+            handleRequest(HttpMethod.Post, "/api/topics") {
+                addHeader("Authorization", "Bearer ${loginToken("test", TEST_KEY)}")
+                addHeader(HttpHeaders.ContentType, "application/json")
+                setBody(jacksonObjectMapper().writeValueAsString(topic))
+            }
+        ) {
             assertEquals(HttpStatusCode.Created, response.status())
         }
 
         confirmVerified()
 
-        with(handleRequest(HttpMethod.Get, "/api/topics/${topic.id}") {
-            addHeader("Authorization", "Bearer ${loginToken("test", TEST_KEY)}")
-        }) {
+        with(
+            handleRequest(HttpMethod.Get, "/api/topics/${topic.id}") {
+                addHeader("Authorization", "Bearer ${loginToken("test", TEST_KEY)}")
+            }
+        ) {
             assertEquals(jacksonObjectMapper().readValue(response.content, Topic::class.java), topic)
             assertEquals(HttpStatusCode.OK, response.status())
         }
@@ -90,21 +97,23 @@ class TopicControllerTest {
 
         confirmVerified()
 
-        with(handleRequest(HttpMethod.Put, "/api/topics/${topic.id}") {
-            addHeader("Authorization", "Bearer ${loginToken("test", TEST_KEY)}")
-            addHeader(HttpHeaders.ContentType, "application/json")
-            setBody(
-                jacksonObjectMapper().writeValueAsString(
-                    Topic(
-                        topic.id,
-                        "Changed Title Test",
-                        topic.description,
-                        topic.markdown,
-                        topic.private
+        with(
+            handleRequest(HttpMethod.Put, "/api/topics/${topic.id}") {
+                addHeader("Authorization", "Bearer ${loginToken("test", TEST_KEY)}")
+                addHeader(HttpHeaders.ContentType, "application/json")
+                setBody(
+                    jacksonObjectMapper().writeValueAsString(
+                        Topic(
+                            topic.id,
+                            "Changed Title Test",
+                            topic.description,
+                            topic.markdown,
+                            topic.private
+                        )
                     )
                 )
-            )
-        }) {
+            }
+        ) {
             with(jacksonObjectMapper().readValue(response.content, Topic::class.java)) {
                 assertNotEquals(topic.title, title)
                 assertEquals(topic.id, id)

@@ -34,9 +34,11 @@ class ObjControllerTest {
 
     @Test
     fun `test get objs empty`() = withTestApplication(TestEnvironment) {
-        with(handleRequest(HttpMethod.Get, "/api/tools/objs") {
-            addHeader("Authorization", "Bearer ${loginToken("test", TEST_KEY)}")
-        }) {
+        with(
+            handleRequest(HttpMethod.Get, "/api/tools/objs") {
+                addHeader("Authorization", "Bearer ${loginToken("test", TEST_KEY)}")
+            }
+        ) {
             assertEquals(HttpStatusCode.NotFound, response.status())
         }
     }
@@ -47,11 +49,13 @@ class ObjControllerTest {
         every { obj.id } returns 4151
         every { obj.name } returns "Abyssal Whip"
 
-        with(handleRequest(HttpMethod.Post, "/api/tools/objs") {
-            addHeader("Authorization", "Bearer ${loginToken("test", TEST_KEY)}")
-            addHeader(HttpHeaders.ContentType, "application/json")
-            setBody(jacksonObjectMapper().writeValueAsString(obj))
-        }) {
+        with(
+            handleRequest(HttpMethod.Post, "/api/tools/objs") {
+                addHeader("Authorization", "Bearer ${loginToken("test", TEST_KEY)}")
+                addHeader(HttpHeaders.ContentType, "application/json")
+                setBody(jacksonObjectMapper().writeValueAsString(obj))
+            }
+        ) {
             assertEquals(HttpStatusCode.Created, response.status())
         }
 
@@ -64,17 +68,21 @@ class ObjControllerTest {
         every { obj.id } returns 4151
         every { obj.name } returns "Abyssal Whip"
 
-        with(handleRequest(HttpMethod.Post, "/api/tools/objs") {
-            addHeader("Authorization", "Bearer ${loginToken("test", TEST_KEY)}")
-            addHeader(HttpHeaders.ContentType, "application/json")
-            setBody(jacksonObjectMapper().writeValueAsString(obj))
-        }) {
+        with(
+            handleRequest(HttpMethod.Post, "/api/tools/objs") {
+                addHeader("Authorization", "Bearer ${loginToken("test", TEST_KEY)}")
+                addHeader(HttpHeaders.ContentType, "application/json")
+                setBody(jacksonObjectMapper().writeValueAsString(obj))
+            }
+        ) {
             assertEquals(HttpStatusCode.Created, response.status())
         }
 
-        with(handleRequest(HttpMethod.Get, "/api/tools/objs") {
-            addHeader("Authorization", "Bearer ${loginToken("test", TEST_KEY)}")
-        }) {
+        with(
+            handleRequest(HttpMethod.Get, "/api/tools/objs") {
+                addHeader("Authorization", "Bearer ${loginToken("test", TEST_KEY)}")
+            }
+        ) {
             with(jacksonObjectMapper().readValue(response.content, Array<Obj>::class.java).first()) {
                 assertEquals(obj.id, id)
                 assertEquals(obj.name, name)
@@ -88,5 +96,3 @@ class ObjControllerTest {
         confirmVerified()
     }
 }
-
-

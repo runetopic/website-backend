@@ -1,7 +1,6 @@
 package com.runetopic.api.topics
 
 import com.runetopic.exception.InternalServerErrorException
-import com.runetopic.exception.NotFoundException
 import io.ktor.features.*
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -30,7 +29,7 @@ object TopicService : KoinComponent {
     }
 
     fun one(id: UUID): Topic = with(topicStorage) {
-        if (storage.none { it.id == id })  throw BadRequestException("Couldn't find Topic with uuid $id")
+        if (storage.none { it.id == id }) throw BadRequestException("Couldn't find Topic with uuid $id")
         storage[storage.indexOfFirst { it.id == id }]
     }
 }

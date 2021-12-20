@@ -1,10 +1,7 @@
 package com.runetopic.plugins.routing
 
 import com.runetopic.Authentications
-import com.runetopic.api.login.LoginCredentials
 import com.runetopic.api.user.UserService
-import com.runetopic.exception.InvalidUsernameOrPasswordException
-import com.runetopic.plugins.loginToken
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.auth.jwt.*

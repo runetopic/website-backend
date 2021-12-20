@@ -5,7 +5,6 @@ import com.runetopic.TestEnvironment
 import com.runetopic.TestEnvironment.TEST_KEY
 import com.runetopic.api.tools.npc.Npc
 import com.runetopic.api.tools.npc.NpcStorage
-import com.runetopic.module
 import com.runetopic.plugins.loginToken
 import io.ktor.application.*
 import io.ktor.http.*
@@ -38,9 +37,11 @@ class NpcControllerTest {
 
     @Test
     fun `test get npcs empty`() = withTestApplication(TestEnvironment) {
-        with(handleRequest(HttpMethod.Get, "/api/tools/npcs") {
-            addHeader("Authorization", "Bearer ${loginToken("test", TEST_KEY)}")
-        }) {
+        with(
+            handleRequest(HttpMethod.Get, "/api/tools/npcs") {
+                addHeader("Authorization", "Bearer ${loginToken("test", TEST_KEY)}")
+            }
+        ) {
             assertEquals(HttpStatusCode.NotFound, response.status())
         }
     }
@@ -51,11 +52,13 @@ class NpcControllerTest {
         every { npc.id } returns 1
         every { npc.name } returns "Hans"
 
-        with(handleRequest(HttpMethod.Post, "/api/tools/npcs") {
-            addHeader("Authorization", "Bearer ${loginToken("test", TEST_KEY)}")
-            addHeader(HttpHeaders.ContentType, "application/json")
-            setBody(jacksonObjectMapper().writeValueAsString(npc))
-        }) {
+        with(
+            handleRequest(HttpMethod.Post, "/api/tools/npcs") {
+                addHeader("Authorization", "Bearer ${loginToken("test", TEST_KEY)}")
+                addHeader(HttpHeaders.ContentType, "application/json")
+                setBody(jacksonObjectMapper().writeValueAsString(npc))
+            }
+        ) {
             assertEquals(HttpStatusCode.Created, response.status())
         }
 
@@ -68,17 +71,21 @@ class NpcControllerTest {
         every { npc.id } returns 1
         every { npc.name } returns "Hans"
 
-        with(handleRequest(HttpMethod.Post, "/api/tools/npcs") {
-            addHeader("Authorization", "Bearer ${loginToken("test", TEST_KEY)}")
-            addHeader(HttpHeaders.ContentType, "application/json")
-            setBody(jacksonObjectMapper().writeValueAsString(npc))
-        }) {
+        with(
+            handleRequest(HttpMethod.Post, "/api/tools/npcs") {
+                addHeader("Authorization", "Bearer ${loginToken("test", TEST_KEY)}")
+                addHeader(HttpHeaders.ContentType, "application/json")
+                setBody(jacksonObjectMapper().writeValueAsString(npc))
+            }
+        ) {
             assertEquals(HttpStatusCode.Created, response.status())
         }
 
-        with(handleRequest(HttpMethod.Get, "/api/tools/npcs") {
-            addHeader("Authorization", "Bearer ${loginToken("test", TEST_KEY)}")
-        }) {
+        with(
+            handleRequest(HttpMethod.Get, "/api/tools/npcs") {
+                addHeader("Authorization", "Bearer ${loginToken("test", TEST_KEY)}")
+            }
+        ) {
             with(jacksonObjectMapper().readValue(response.content, Array<Npc>::class.java).first()) {
                 assertEquals(npc.id, id)
                 assertEquals(npc.name, name)

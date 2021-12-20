@@ -3,7 +3,7 @@ package com.runetopic
 import io.ktor.application.*
 import io.ktor.config.*
 
-object TestEnvironment: (Application) -> Unit {
+object TestEnvironment : (Application) -> Unit {
     private const val JWT_PROPERTY = "jwt.secret"
     const val TEST_KEY = "testSecretKey"
 
