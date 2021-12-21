@@ -3,6 +3,7 @@ package com.runetopic.plugins.routing
 import com.runetopic.api.registration.Registration
 import com.runetopic.api.user.User
 import com.runetopic.api.user.UserService
+import com.runetopic.crypto.BCrypt
 import com.runetopic.exception.UsernameExistsException
 import io.ktor.application.*
 import io.ktor.http.*
@@ -24,7 +25,7 @@ fun Application.configureRegistrationRouting() {
             if (userService.exists(registration.username)) throw UsernameExistsException()
             val user = User(
                 registration.username,
-                registration.password,
+                BCrypt.hashpw(registration.password, BCrypt.gensalt(12)),
                 registration.email,
                 registration.dateOfBirth
             )

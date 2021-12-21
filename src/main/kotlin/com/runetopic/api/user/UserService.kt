@@ -3,7 +3,6 @@ package com.runetopic.api.user
 import com.runetopic.api.findOneAsync
 import com.runetopic.api.insertOneAsync
 import com.runetopic.exception.InvalidUsernameOrPasswordException
-import kotlinx.coroutines.runBlocking
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.litote.kmongo.eq
