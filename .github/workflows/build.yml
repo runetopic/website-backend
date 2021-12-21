@@ -20,7 +20,15 @@ jobs:
           restore-keys: ${{ runner.os }}-gradle
       - name: Change wrapper permissions
         run: chmod +x ./gradlew
+      - name: Start MongoDB
+        uses: supercharge/mongodb-github-action@1.7.0
+        with:
+          mongodb-version: 4.4
       - name: Build and analyze
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: ./gradlew clean build jar test --info
+          CI: true
+        uses: gradle/gradle-build-action@v2
+        with:
+          gradle-version: 7.3
+          arguments: build

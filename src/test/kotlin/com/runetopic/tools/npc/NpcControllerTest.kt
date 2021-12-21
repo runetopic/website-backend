@@ -2,9 +2,10 @@ package com.runetopic.tools.npc
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.runetopic.TestEnvironment
-import com.runetopic.TestEnvironment.TEST_KEY
+import com.runetopic.TestEnvironment.JWT_TOKEN
 import com.runetopic.api.tools.npc.Npc
 import com.runetopic.api.tools.npc.NpcStorage
+import com.runetopic.api.topics.Topic
 import com.runetopic.plugins.loginToken
 import io.ktor.application.*
 import io.ktor.http.*
@@ -13,6 +14,7 @@ import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import kotlinx.coroutines.runBlocking
 import org.koin.ktor.ext.inject
 import kotlin.test.BeforeTest
 import kotlin.test.Test
@@ -24,8 +26,17 @@ import kotlin.test.assertEquals
 class NpcControllerTest {
 
     @BeforeTest
-    fun `clear npc storage`() = withTestApplication(TestEnvironment) {
-        with(application.inject<NpcStorage>()) { value.storage.clear() }
+    fun `clear npc storage`() {
+        withTestApplication(TestEnvironment) {
+            runBlocking {
+                with(application.inject<NpcStorage>()) {
+                    val collection = value.database().getCollection<Topic>(this.value.collection())
+                    if (collection.countDocuments() != 0L) {
+                        collection.drop()
+                    }
+                }
+            }
+        }
     }
 
     @Test
@@ -39,10 +50,11 @@ class NpcControllerTest {
     fun `test get npcs empty`() = withTestApplication(TestEnvironment) {
         with(
             handleRequest(HttpMethod.Get, "/api/tools/npcs") {
-                addHeader("Authorization", "Bearer ${loginToken("test", TEST_KEY)}")
+                addHeader("Authorization", "Bearer ${loginToken("test", JWT_TOKEN)}")
             }
         ) {
-            assertEquals(HttpStatusCode.NotFound, response.status())
+            assertEquals(HttpStatusCode.OK, response.status())
+            assertEquals("[ ]", response.content)
         }
     }
 
@@ -54,7 +66,7 @@ class NpcControllerTest {
 
         with(
             handleRequest(HttpMethod.Post, "/api/tools/npcs") {
-                addHeader("Authorization", "Bearer ${loginToken("test", TEST_KEY)}")
+                addHeader("Authorization", "Bearer ${loginToken("test", JWT_TOKEN)}")
                 addHeader(HttpHeaders.ContentType, "application/json")
                 setBody(jacksonObjectMapper().writeValueAsString(npc))
             }
@@ -73,7 +85,7 @@ class NpcControllerTest {
 
         with(
             handleRequest(HttpMethod.Post, "/api/tools/npcs") {
-                addHeader("Authorization", "Bearer ${loginToken("test", TEST_KEY)}")
+                addHeader("Authorization", "Bearer ${loginToken("test", JWT_TOKEN)}")
                 addHeader(HttpHeaders.ContentType, "application/json")
                 setBody(jacksonObjectMapper().writeValueAsString(npc))
             }
@@ -83,7 +95,7 @@ class NpcControllerTest {
 
         with(
             handleRequest(HttpMethod.Get, "/api/tools/npcs") {
-                addHeader("Authorization", "Bearer ${loginToken("test", TEST_KEY)}")
+                addHeader("Authorization", "Bearer ${loginToken("test", JWT_TOKEN)}")
             }
         ) {
             with(jacksonObjectMapper().readValue(response.content, Array<Npc>::class.java).first()) {

@@ -10,7 +10,6 @@ import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
 import org.koin.ktor.ext.inject
-import java.util.*
 
 fun Application.configureTopicRouting() {
 
@@ -19,7 +18,7 @@ fun Application.configureTopicRouting() {
     routing {
         get("/api/topics") { call.respond(topicService.all()) }
         get("/api/topics/{id}") {
-            val id = UUID.fromString(call.parameters["id"])
+            val id = call.parameters["id"]!!
             call.respond(HttpStatusCode.OK, topicService.one(id))
         }
         authenticate(Authentications.LOGGED_IN) {
@@ -29,7 +28,7 @@ fun Application.configureTopicRouting() {
                 call.respond(HttpStatusCode.Created, topic)
             }
             put("/api/topics/{id}") {
-                val id = UUID.fromString(call.parameters["id"])
+                val id = call.parameters["id"]!!
                 val topic = with(call.receive<Topic>()) {
                     // Retain the id of the topic.
                     Topic(id, title, description, markdown, private)
