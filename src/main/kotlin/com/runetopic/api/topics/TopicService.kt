@@ -29,7 +29,7 @@ object TopicService : KoinComponent {
         updateOneAsync(Topic::id eq id, topic)
     }
 
-    fun one(id: String): Topic = with(topicStorage) {
+    fun findById(id: String): Topic = with(topicStorage) {
         findOneAsync(Topic::id eq id) ?: throw BadRequestException("Couldn't find Topic with uuid $id")
     }
 }

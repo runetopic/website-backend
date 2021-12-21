@@ -19,7 +19,7 @@ fun Application.configureTopicRouting() {
         get("/api/topics") { call.respond(topicService.all()) }
         get("/api/topics/{id}") {
             val id = call.parameters["id"]!!
-            call.respond(HttpStatusCode.OK, topicService.one(id))
+            call.respond(HttpStatusCode.OK, topicService.findById(id))
         }
         authenticate(Authentications.LOGGED_IN) {
             post("/api/topics") {

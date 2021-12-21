@@ -2,7 +2,6 @@ package com.runetopic.api.tools.obj
 
 import com.runetopic.api.findAllAsync
 import com.runetopic.api.insertOneAsync
-import kotlinx.coroutines.runBlocking
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
