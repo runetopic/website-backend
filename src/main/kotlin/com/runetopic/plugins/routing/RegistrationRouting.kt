@@ -11,6 +11,7 @@ import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
 import org.koin.ktor.ext.inject
+import org.litote.kmongo.eq
 
 /**
  * @author Jordan Abraham
@@ -22,15 +23,14 @@ fun Application.configureRegistrationRouting() {
     routing {
         post("/api/register") {
             val registration = call.receive<Registration>()
-            if (userService.exists(registration.username)) throw UsernameExistsException()
+            if (userService.exists<User>(User::username eq registration.username)) throw UsernameExistsException()
             val user = User(
                 registration.username,
                 BCrypt.hashpw(registration.password, BCrypt.gensalt(12)),
                 registration.email,
                 registration.dateOfBirth
             )
-            userService.add(user)
-            call.respond(HttpStatusCode.Created)
+            if (userService.add(user)) call.respond(HttpStatusCode.Created)
         }
     }
 }

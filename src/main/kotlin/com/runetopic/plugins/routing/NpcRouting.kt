@@ -19,12 +19,15 @@ fun Application.configureNpcRouting() {
         authenticate(Authentications.LOGGED_IN) {
             get("/api/tools/npcs") {
                 val sorted = call.request.queryParameters["sorted"] == true.toString()
-                call.respond(npcService.all(sorted))
+                if (sorted) {
+                    call.respond(npcService.findSorted(Npc::id))
+                } else {
+                    call.respond(npcService.find<Npc>())
+                }
             }
             post("/api/tools/npcs") {
                 val npc = call.receive<Npc>()
-                npcService.add(npc)
-                call.respond(HttpStatusCode.Created)
+                if (npcService.add(npc)) call.respond(HttpStatusCode.Created)
             }
         }
     }

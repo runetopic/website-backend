@@ -19,7 +19,11 @@ fun Application.configureObjRouting() {
         authenticate(Authentications.LOGGED_IN) {
             get("/api/tools/objs") {
                 val sorted = call.request.queryParameters["sorted"] == true.toString()
-                call.respond(objService.all(sorted))
+                if (sorted) {
+                    call.respond(objService.findSorted(Obj::id))
+                } else {
+                    call.respond(objService.find<Obj>())
+                }
             }
             post("/api/tools/objs") {
                 val obj = call.receive<Obj>()

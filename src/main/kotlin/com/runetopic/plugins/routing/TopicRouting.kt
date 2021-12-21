@@ -5,27 +5,28 @@ import com.runetopic.api.topics.Topic
 import com.runetopic.api.topics.TopicService
 import io.ktor.application.*
 import io.ktor.auth.*
+import io.ktor.features.*
 import io.ktor.http.*
 import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
 import org.koin.ktor.ext.inject
+import org.litote.kmongo.eq
 
 fun Application.configureTopicRouting() {
 
     val topicService by inject<TopicService>()
 
     routing {
-        get("/api/topics") { call.respond(topicService.all()) }
+        get("/api/topics") { call.respond(topicService.find<Topic>()) }
         get("/api/topics/{id}") {
             val id = call.parameters["id"]!!
-            call.respond(HttpStatusCode.OK, topicService.findById(id))
+            call.respond(HttpStatusCode.OK, topicService.findBy<Topic>(Topic::id eq id) ?: throw BadRequestException("Couldn't find Topic with uuid $id"))
         }
         authenticate(Authentications.LOGGED_IN) {
             post("/api/topics") {
                 val topic = call.receive<Topic>()
-                topicService.add(topic)
-                call.respond(HttpStatusCode.Created, topic)
+                if (topicService.add(topic)) call.respond(HttpStatusCode.Created, topic)
             }
             put("/api/topics/{id}") {
                 val id = call.parameters["id"]!!
@@ -33,8 +34,7 @@ fun Application.configureTopicRouting() {
                     // Retain the id of the topic.
                     Topic(id, title, description, markdown, private)
                 }
-                topicService.update(id, topic)
-                call.respond(HttpStatusCode.Accepted, topic)
+                if (topicService.update(Topic::id eq id, topic)) call.respond(HttpStatusCode.Accepted, topic)
             }
         }
     }
