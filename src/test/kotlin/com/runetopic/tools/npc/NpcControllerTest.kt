@@ -5,7 +5,6 @@ import com.runetopic.TestEnvironment
 import com.runetopic.TestEnvironment.JWT_TOKEN
 import com.runetopic.api.tools.npc.Npc
 import com.runetopic.api.tools.npc.NpcStorage
-import com.runetopic.api.topics.Topic
 import com.runetopic.plugins.loginToken
 import io.ktor.application.*
 import io.ktor.http.*
@@ -30,9 +29,8 @@ class NpcControllerTest {
         withTestApplication(TestEnvironment) {
             runBlocking {
                 with(application.inject<NpcStorage>()) {
-                    val collection = value.database().getCollection<Topic>(this.value.collection())
-                    if (collection.countDocuments() != 0L) {
-                        collection.drop()
+                    if (this.value.countDocuments<Npc>() != 0L) {
+                        this.value.drop<Npc>()
                     }
                 }
             }

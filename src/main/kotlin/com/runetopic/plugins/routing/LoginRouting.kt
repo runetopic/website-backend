@@ -13,6 +13,7 @@ import io.ktor.routing.*
 import org.koin.ktor.ext.inject
 
 fun Application.configureLoginRouting() {
+
     val secret = environment.config.property("jwt.secret").getString()
 
     val userService by inject<UserService>()
@@ -21,8 +22,8 @@ fun Application.configureLoginRouting() {
         post("/api/login") {
             val credentials = call.receive<LoginCredentials>()
             val user = userService.findByUsername(credentials.username)
-            if (!BCrypt.checkpw(credentials.password, user.password)) throw InvalidUsernameOrPasswordException()
-            call.respond(HttpStatusCode.OK, hashMapOf("token" to loginToken(credentials.username, secret)))
+            if (!BCrypt.checkpw(credentials.password.toString(), user.password.toString())) throw InvalidUsernameOrPasswordException()
+            call.respond(HttpStatusCode.OK, hashMapOf("token" to loginToken(credentials.username.toString(), secret)))
         }
     }
 }

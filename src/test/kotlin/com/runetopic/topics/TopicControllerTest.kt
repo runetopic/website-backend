@@ -30,9 +30,8 @@ class TopicControllerTest {
         withTestApplication(TestEnvironment) {
             runBlocking {
                 with(application.inject<TopicStorage>()) {
-                    val collection = value.database().getCollection<Topic>(this.value.collection())
-                    if (collection.countDocuments() != 0L) {
-                        collection.drop()
+                    if (this.value.countDocuments<Topic>() != 0L) {
+                        this.value.drop<Topic>()
                     }
                 }
             }

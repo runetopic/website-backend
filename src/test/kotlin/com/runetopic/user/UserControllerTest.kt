@@ -3,7 +3,6 @@ package com.runetopic.user
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.runetopic.TestEnvironment
 import com.runetopic.TestEnvironment.JWT_TOKEN
-import com.runetopic.api.insertOneAsync
 import com.runetopic.api.user.User
 import com.runetopic.api.user.UserStorage
 import com.runetopic.plugins.loginToken
@@ -28,9 +27,8 @@ class UserControllerTest {
         withTestApplication(TestEnvironment) {
             runBlocking {
                 with(application.inject<UserStorage>()) {
-                    val collection = value.database().getCollection<User>(this.value.collection())
-                    if (collection.countDocuments() != 0L) {
-                        collection.drop()
+                    if (this.value.countDocuments<User>() != 0L) {
+                        this.value.drop<User>()
                     }
                 }
             }
@@ -47,7 +45,9 @@ class UserControllerTest {
 
         val userStorage by application.inject<UserStorage>()
 
-        userStorage.insertOneAsync(user)
+        runBlocking {
+            userStorage.insertOne(user)
+        }
 
         with(
             handleRequest(HttpMethod.Get, "/api/user/details") {

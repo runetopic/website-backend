@@ -5,7 +5,6 @@ import com.runetopic.TestEnvironment
 import com.runetopic.TestEnvironment.JWT_TOKEN
 import com.runetopic.api.tools.obj.Obj
 import com.runetopic.api.tools.obj.ObjStorage
-import com.runetopic.api.topics.Topic
 import com.runetopic.plugins.loginToken
 import io.ktor.application.*
 import io.ktor.config.*
@@ -22,14 +21,14 @@ import kotlin.test.assertEquals
  * @author Jordan Abraham
  */
 class ObjControllerTest {
+
     @BeforeTest
     fun `clear obj storage`() {
         withTestApplication(TestEnvironment) {
             runBlocking {
                 with(application.inject<ObjStorage>()) {
-                    val collection = value.database().getCollection<Topic>(this.value.collection())
-                    if (collection.countDocuments() != 0L) {
-                        collection.drop()
+                    if (this.value.countDocuments<Obj>() != 0L) {
+                        this.value.drop<Obj>()
                     }
                 }
             }

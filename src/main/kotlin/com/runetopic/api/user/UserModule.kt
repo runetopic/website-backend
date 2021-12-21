@@ -6,6 +6,6 @@ import org.koin.dsl.module
  * @author Jordan Abraham
  */
 fun userModule() = module {
-    single { UserStorage }
-    single { UserService }
+    single { UserStorage() }
+    single { UserService() }
 }
