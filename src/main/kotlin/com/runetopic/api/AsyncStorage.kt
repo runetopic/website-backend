@@ -8,6 +8,9 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.litote.kmongo.EMPTY_BSON
 
+/**
+ * @author Jordan Abraham
+ */
 abstract class AsyncStorage<T : Any> : KoinComponent {
 
     val database = inject<MongoClient>().value.driver.getDatabase("api")

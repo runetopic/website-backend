@@ -8,6 +8,9 @@ import org.koin.core.component.KoinComponent
 import org.litote.kmongo.coroutine.coroutine
 import org.litote.kmongo.reactivestreams.KMongo
 
+/**
+ * @author Jordan Abraham
+ */
 class MongoClient(
     application: Application
 ) : KoinComponent {

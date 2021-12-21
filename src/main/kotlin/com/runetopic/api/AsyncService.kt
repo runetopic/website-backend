@@ -3,6 +3,9 @@ package com.runetopic.api
 import org.bson.conversions.Bson
 import org.koin.core.component.KoinComponent
 
+/**
+ * @author Jordan Abraham
+ */
 abstract class AsyncService<T : AsyncStorage<*>> : KoinComponent {
 
     abstract fun storage(): T
