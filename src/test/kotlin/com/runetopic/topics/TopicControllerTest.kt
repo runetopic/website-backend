@@ -18,6 +18,7 @@ import org.litote.kmongo.newId
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNotEquals
 
 /**
  * @author Jordan Abraham
@@ -106,39 +107,39 @@ class TopicControllerTest {
 
         confirmVerified()
 
-//        with(
-//            handleRequest(HttpMethod.Put, "/api/topics/${topic.id}") {
-//                addHeader("Authorization", "Bearer ${loginToken("test", JWT_TOKEN)}")
-//                addHeader(HttpHeaders.ContentType, "application/json")
-//                setBody(
-//                    jacksonObjectMapper().writeValueAsString(
-//                        Topic(
-//                            topic.id,
-//                            "Changed Title Test",
-//                            topic.description,
-//                            topic.markdown,
-//                            topic.private
-//                        )
-//                    )
-//                )
-//            }
-//        ) {
-//            with(jacksonObjectMapper().readValue(response.content, Topic::class.java)) {
-//                assertNotEquals(topic.title, title)
-//                assertEquals(topic.id, id)
-//                assertEquals(topic.description, description)
-//                assertEquals(topic.markdown, markdown)
-//                assertEquals(topic.private, private)
-//                assertEquals(HttpStatusCode.Accepted, response.status())
-//            }
-//        }
-//
-//        verify { topic.id }
-//        verify { topic.title }
-//        verify { topic.description }
-//        verify { topic.markdown }
-//        verify { topic.private }
-//
-//        confirmVerified()
+        with(
+            handleRequest(HttpMethod.Put, "/api/topics/${topic.id}") {
+                addHeader("Authorization", "Bearer ${loginToken("test", JWT_TOKEN)}")
+                addHeader(HttpHeaders.ContentType, "application/json")
+                setBody(
+                    jacksonObjectMapper().writeValueAsString(
+                        Topic(
+                            topic.id,
+                            "Changed Title Test",
+                            topic.description,
+                            topic.markdown,
+                            topic.private
+                        )
+                    )
+                )
+            }
+        ) {
+            with(jacksonObjectMapper().readValue(response.content, Topic::class.java)) {
+                assertNotEquals(topic.title, title)
+                assertEquals(topic.id, id)
+                assertEquals(topic.description, description)
+                assertEquals(topic.markdown, markdown)
+                assertEquals(topic.private, private)
+                assertEquals(HttpStatusCode.Accepted, response.status())
+            }
+        }
+
+        verify { topic.id }
+        verify { topic.title }
+        verify { topic.description }
+        verify { topic.markdown }
+        verify { topic.private }
+
+        confirmVerified()
     }
 }
