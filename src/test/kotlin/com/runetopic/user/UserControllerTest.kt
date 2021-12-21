@@ -47,9 +47,7 @@ class UserControllerTest {
 
         val userStorage by application.inject<UserStorage>()
 
-        runBlocking {
-            userStorage.insertOneAsync(user)
-        }
+        userStorage.insertOneAsync(user)
 
         with(
             handleRequest(HttpMethod.Get, "/api/user/details") {
