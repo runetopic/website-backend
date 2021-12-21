@@ -9,9 +9,7 @@ import io.ktor.http.*
 import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
-import org.bson.types.ObjectId
 import org.koin.ktor.ext.inject
-import org.litote.kmongo.id.toId
 
 fun Application.configureTopicRouting() {
 

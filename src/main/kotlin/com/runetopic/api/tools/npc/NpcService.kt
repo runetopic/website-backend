@@ -1,7 +1,8 @@
 package com.runetopic.api.tools.npc
 
-import com.runetopic.exception.InternalServerErrorException
-import com.runetopic.exception.NotFoundException
+import com.runetopic.api.findAllAsync
+import com.runetopic.api.insertOneAsync
+import kotlinx.coroutines.runBlocking
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -9,19 +10,17 @@ import org.koin.core.component.inject
  * @author Jordan Abraham
  */
 object NpcService : KoinComponent {
+
     private val npcStorage by inject<NpcStorage>()
 
-    fun all(sorted: Boolean): Set<Npc> = with(npcStorage) {
-        if (storage.isNullOrEmpty()) throw NotFoundException()
+    suspend fun all(sorted: Boolean): List<Npc> = with(npcStorage) {
         when {
-            sorted -> storage.toSortedSet(compareBy { it.id })
-            else -> storage.toSet()
+            sorted -> findAllAsync().toList().sortedBy(Npc::id)
+            else -> findAllAsync().toList()
         }
     }
 
     fun add(npc: Npc) = with(npcStorage) {
-        if (!storage.add(npc)) {
-            throw InternalServerErrorException()
-        }
+        insertOneAsync(npc)
     }
 }

@@ -2,7 +2,7 @@ package com.runetopic.user
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.runetopic.TestEnvironment
-import com.runetopic.TestEnvironment.TEST_KEY
+import com.runetopic.TestEnvironment.JWT_TOKEN
 import com.runetopic.api.insertOneAsync
 import com.runetopic.api.user.User
 import com.runetopic.api.user.UserStorage
@@ -53,7 +53,7 @@ class UserControllerTest {
 
         with(
             handleRequest(HttpMethod.Get, "/api/user/details") {
-                addHeader("Authorization", "Bearer ${loginToken("test", TEST_KEY)}")
+                addHeader("Authorization", "Bearer ${loginToken("test", JWT_TOKEN)}")
                 addHeader(HttpHeaders.ContentType, "application/json")
                 setBody(jacksonObjectMapper().writeValueAsString("user"))
             }

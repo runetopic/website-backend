@@ -2,7 +2,7 @@ package com.runetopic.topics
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.runetopic.TestEnvironment
-import com.runetopic.TestEnvironment.TEST_KEY
+import com.runetopic.TestEnvironment.JWT_TOKEN
 import com.runetopic.api.topics.Topic
 import com.runetopic.api.topics.TopicStorage
 import com.runetopic.plugins.loginToken
@@ -43,7 +43,7 @@ class TopicControllerTest {
     fun `test get topics empty`() = withTestApplication(TestEnvironment) {
         with(
             handleRequest(HttpMethod.Get, "/api/topics") {
-                addHeader("Authorization", "Bearer ${loginToken("test", TEST_KEY)}")
+                addHeader("Authorization", "Bearer ${loginToken("test", JWT_TOKEN)}")
             }
         ) {
             assertEquals(HttpStatusCode.OK, response.status())
@@ -62,7 +62,7 @@ class TopicControllerTest {
 
         with(
             handleRequest(HttpMethod.Post, "/api/topics") {
-                addHeader("Authorization", "Bearer ${loginToken("test", TEST_KEY)}")
+                addHeader("Authorization", "Bearer ${loginToken("test", JWT_TOKEN)}")
                 addHeader(HttpHeaders.ContentType, "application/json")
                 setBody(jacksonObjectMapper().writeValueAsString(topic))
             }
@@ -84,7 +84,7 @@ class TopicControllerTest {
 
         with(
             handleRequest(HttpMethod.Post, "/api/topics") {
-                addHeader("Authorization", "Bearer ${loginToken("test", TEST_KEY)}")
+                addHeader("Authorization", "Bearer ${loginToken("test", JWT_TOKEN)}")
                 addHeader(HttpHeaders.ContentType, "application/json")
                 setBody(jacksonObjectMapper().writeValueAsString(topic))
             }
@@ -98,7 +98,7 @@ class TopicControllerTest {
 
         with(
             handleRequest(HttpMethod.Get, "/api/topics/${topic.id}") {
-                addHeader("Authorization", "Bearer ${loginToken("test", TEST_KEY)}")
+                addHeader("Authorization", "Bearer ${loginToken("test", JWT_TOKEN)}")
             }
         ) {
             assertEquals(jacksonObjectMapper().readValue(response.content, Topic::class.java), topic)
@@ -110,7 +110,7 @@ class TopicControllerTest {
 
         with(
             handleRequest(HttpMethod.Put, "/api/topics/${topic.id}") {
-                addHeader("Authorization", "Bearer ${loginToken("test", TEST_KEY)}")
+                addHeader("Authorization", "Bearer ${loginToken("test", JWT_TOKEN)}")
                 addHeader(HttpHeaders.ContentType, "application/json")
                 setBody(
                     jacksonObjectMapper().writeValueAsString(

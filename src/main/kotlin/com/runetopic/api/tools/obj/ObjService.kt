@@ -1,7 +1,8 @@
 package com.runetopic.api.tools.obj
 
-import com.runetopic.exception.InternalServerErrorException
-import com.runetopic.exception.NotFoundException
+import com.runetopic.api.findAllAsync
+import com.runetopic.api.insertOneAsync
+import kotlinx.coroutines.runBlocking
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -9,19 +10,17 @@ import org.koin.core.component.inject
  * @author Jordan Abraham
  */
 object ObjService : KoinComponent {
+
     private val objStorage by inject<ObjStorage>()
 
-    fun all(sorted: Boolean): Set<Obj> = with(objStorage) {
-        if (storage.isNullOrEmpty()) throw NotFoundException()
+    suspend fun all(sorted: Boolean): List<Obj> = with(objStorage) {
         when {
-            sorted -> storage.toSortedSet(compareBy { it.id })
-            else -> storage.toSet()
+            sorted -> findAllAsync().toList().sortedBy(Obj::id)
+            else -> findAllAsync().toList()
         }
     }
 
     fun add(obj: Obj) = with(objStorage) {
-        if (!storage.add(obj)) {
-            throw InternalServerErrorException()
-        }
+        insertOneAsync(obj)
     }
 }

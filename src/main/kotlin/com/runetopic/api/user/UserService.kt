@@ -15,21 +15,15 @@ object UserService : KoinComponent {
 
     private val userStorage by inject<UserStorage>()
 
-    fun add(user: User) = runBlocking {
-        with(userStorage) {
-            insertOneAsync(user)
-        }
+    fun add(user: User) = with(userStorage) {
+        insertOneAsync(user)
     }
 
-    fun exists(username: String): Boolean = runBlocking {
-        with(userStorage) {
-            findOneAsync(User::username eq username) != null
-        }
+    fun exists(username: String): Boolean = with(userStorage) {
+        findOneAsync(User::username eq username) != null
     }
 
-    fun findByUsername(username: String): User = runBlocking {
-        with(userStorage) {
-            findOneAsync(User::username eq username) ?: throw InvalidUsernameOrPasswordException()
-        }
+    fun findByUsername(username: String): User = with(userStorage) {
+        findOneAsync(User::username eq username) ?: throw InvalidUsernameOrPasswordException()
     }
 }
