@@ -3,18 +3,17 @@ package com.runetopic.user
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.runetopic.TestEnvironment
 import com.runetopic.TestEnvironment.TEST_KEY
+import com.runetopic.api.insertOneAsync
 import com.runetopic.api.user.User
 import com.runetopic.api.user.UserStorage
 import com.runetopic.plugins.loginToken
-import io.ktor.application.*
-import io.ktor.auth.jwt.*
 import io.ktor.http.*
 import io.ktor.server.testing.*
 import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.mockk
+import kotlinx.coroutines.runBlocking
 import org.koin.ktor.ext.inject
-import java.util.*
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -25,9 +24,16 @@ import kotlin.test.assertEquals
 class UserControllerTest {
 
     @BeforeTest
-    fun `clear user storage`() = withTestApplication(TestEnvironment) {
-        with(application.inject<UserStorage>()) {
-            value.storage.clear()
+    fun `clear topic storage`() {
+        withTestApplication(TestEnvironment) {
+            runBlocking {
+                with(application.inject<UserStorage>()) {
+                    val collection = value.database().getCollection<User>(this.value.collection())
+                    if (collection.countDocuments() != 0L) {
+                        collection.drop()
+                    }
+                }
+            }
         }
     }
 
@@ -38,7 +44,12 @@ class UserControllerTest {
         every { user.email } returns "test"
         every { user.dateOfBirth } returns "1/1/1111"
         every { user.password } returns "test"
-        UserStorage.storage.add(user)
+
+        val userStorage by application.inject<UserStorage>()
+
+        runBlocking {
+            userStorage.insertOneAsync(user)
+        }
 
         with(
             handleRequest(HttpMethod.Get, "/api/user/details") {

@@ -6,15 +6,15 @@ import com.runetopic.TestEnvironment.TEST_KEY
 import com.runetopic.api.topics.Topic
 import com.runetopic.api.topics.TopicStorage
 import com.runetopic.plugins.loginToken
-import io.ktor.application.*
 import io.ktor.http.*
 import io.ktor.server.testing.*
 import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import kotlinx.coroutines.runBlocking
 import org.koin.ktor.ext.inject
-import java.util.*
+import org.litote.kmongo.newId
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -26,8 +26,17 @@ import kotlin.test.assertNotEquals
 class TopicControllerTest {
 
     @BeforeTest
-    fun `clear topic storage`() = withTestApplication(TestEnvironment) {
-        with(application.inject<TopicStorage>()) { value.storage.clear() }
+    fun `clear topic storage`() {
+        withTestApplication(TestEnvironment) {
+            runBlocking {
+                with(application.inject<TopicStorage>()) {
+                    val collection = value.database().getCollection<Topic>(this.value.collection())
+                    if (collection.countDocuments() != 0L) {
+                        collection.drop()
+                    }
+                }
+            }
+        }
     }
 
     @Test
@@ -45,7 +54,7 @@ class TopicControllerTest {
     @Test
     fun `test post topic`() = withTestApplication(TestEnvironment) {
         val topic = mockk<Topic>()
-        every { topic.id } returns UUID.randomUUID()
+        every { topic.id } returns newId<Topic>().toString()
         every { topic.title } returns "Test Title"
         every { topic.description } returns "Test Description"
         every { topic.markdown } returns "<h1></h1>"
@@ -67,7 +76,7 @@ class TopicControllerTest {
     @Test
     fun `test get topics`() = withTestApplication(TestEnvironment) {
         val topic = mockk<Topic>()
-        every { topic.id } returns UUID.randomUUID()
+        every { topic.id } returns newId<Topic>().toString()
         every { topic.title } returns "Test Title"
         every { topic.description } returns "Test Description"
         every { topic.markdown } returns "<h1></h1>"
@@ -84,6 +93,8 @@ class TopicControllerTest {
         }
 
         confirmVerified()
+
+        println(topic.id)
 
         with(
             handleRequest(HttpMethod.Get, "/api/topics/${topic.id}") {

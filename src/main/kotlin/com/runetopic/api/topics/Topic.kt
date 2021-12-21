@@ -1,12 +1,14 @@
 package com.runetopic.api.topics
 
-import java.util.*
+import org.bson.codecs.pojo.annotations.BsonId
+import org.litote.kmongo.newId
 
 /**
  * @author Jordan Abraham
  */
 data class Topic(
-    val id: UUID = UUID.randomUUID(),
+    @BsonId
+    val id: String = newId<Topic>().toString(),
     val title: String,
     val description: String,
     val markdown: String,

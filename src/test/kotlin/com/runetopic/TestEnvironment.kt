@@ -10,6 +10,7 @@ object TestEnvironment : (Application) -> Unit {
     override fun invoke(application: Application) {
         (application.environment.config as MapApplicationConfig).apply {
             put(JWT_PROPERTY, TEST_KEY)
+            put("mongodb.driver", "mongodb://localhost:27017")
         }
         application.module()
     }
