@@ -228,7 +228,6 @@ object BCrypt {
      * encoding.
      * @param d the byte array to encode
      * @param len the number of bytes to encode
-     * @param rs the destination buffer for the base64-encoded string
      * @exception IllegalArgumentException if the length is invalid
      */
     @Throws(IllegalArgumentException::class)
