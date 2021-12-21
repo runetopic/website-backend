@@ -19,22 +19,22 @@ fun Application.configureTopicRouting() {
 
     routing {
         get("/api/topics") { call.respond(topicService.find<Topic>()) }
-        get("/api/topics/{id}") {
-            val id = call.parameters["id"]!!
-            call.respond(HttpStatusCode.OK, topicService.findBy<Topic>(Topic::id eq id) ?: throw BadRequestException("Couldn't find Topic with uuid $id"))
+        get("/api/topics/{uuid}") {
+            val uuid = call.parameters["uuid"]!!
+            call.respond(HttpStatusCode.OK, topicService.findBy<Topic>(Topic::uuid eq uuid) ?: throw BadRequestException("Couldn't find Topic with uuid $uuid"))
         }
         authenticate(Authentications.LOGGED_IN) {
             post("/api/topics") {
                 val topic = call.receive<Topic>()
                 if (topicService.add(topic)) call.respond(HttpStatusCode.Created, topic)
             }
-            put("/api/topics/{id}") {
-                val id = call.parameters["id"]!!
+            put("/api/topics/{uuid}") {
+                val uuid = call.parameters["uuid"]!!
                 val topic = with(call.receive<Topic>()) {
-                    // Retain the id of the topic.
-                    Topic(id, title, description, markdown, private)
+                    // Retain the uuid of the topic.
+                    Topic(uuid, title, description, markdown, private)
                 }
-                if (topicService.update(Topic::id eq id, topic)) call.respond(HttpStatusCode.Accepted, topic)
+                if (topicService.update(Topic::uuid eq uuid, topic)) call.respond(HttpStatusCode.Accepted, topic)
             }
         }
     }

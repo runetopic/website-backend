@@ -4,7 +4,8 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.runetopic.TestEnvironment
 import com.runetopic.TestEnvironment.JWT_TOKEN
 import com.runetopic.api.tools.obj.Obj
-import com.runetopic.api.tools.obj.ObjStorage
+import com.runetopic.api.tools.obj.ObjService
+import com.runetopic.api.topics.Topic
 import com.runetopic.plugins.loginToken
 import io.ktor.application.*
 import io.ktor.config.*
@@ -13,6 +14,7 @@ import io.ktor.server.testing.*
 import io.mockk.*
 import kotlinx.coroutines.runBlocking
 import org.koin.ktor.ext.inject
+import org.litote.kmongo.newId
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -26,8 +28,8 @@ class ObjControllerTest {
     fun `clear obj storage`() {
         withTestApplication(TestEnvironment) {
             runBlocking {
-                with(application.inject<ObjStorage>()) {
-                    if (this.value.countDocuments<Obj>() != 0L) {
+                with(application.inject<ObjService>()) {
+                    if (this.value.count<Obj>() != 0L) {
                         this.value.drop<Obj>()
                     }
                 }
@@ -57,6 +59,7 @@ class ObjControllerTest {
     @Test
     fun `test post obj`() = withTestApplication(TestEnvironment) {
         val obj = mockk<Obj>()
+        every { obj.uuid } returns newId<Topic>().toString()
         every { obj.id } returns 4151
         every { obj.name } returns "Abyssal Whip"
 
@@ -76,6 +79,7 @@ class ObjControllerTest {
     @Test
     fun `test get objs`() = withTestApplication(TestEnvironment) {
         val obj = mockk<Obj>()
+        every { obj.uuid } returns newId<Topic>().toString()
         every { obj.id } returns 4151
         every { obj.name } returns "Abyssal Whip"
 

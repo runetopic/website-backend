@@ -1,8 +1,10 @@
 package com.runetopic.api.tools.npc
 
-import com.runetopic.api.AsyncStorage
+import com.runetopic.mongodb.AsyncStorage
 
 /**
  * @author Jordan Abraham
  */
-class NpcStorage : AsyncStorage<Npc>()
+class NpcStorage(
+    database: String
+) : AsyncStorage(database)

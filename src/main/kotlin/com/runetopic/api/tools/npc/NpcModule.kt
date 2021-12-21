@@ -6,6 +6,5 @@ import org.koin.dsl.module
  * @author Jordan Abraham
  */
 fun npcModule() = module {
-    single { NpcStorage() }
-    single { NpcService() }
+    single { NpcService(NpcStorage("api")) }
 }

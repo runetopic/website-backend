@@ -1,8 +1,10 @@
 package com.runetopic.api.tools.obj
 
-import com.runetopic.api.AsyncStorage
+import com.runetopic.mongodb.AsyncStorage
 
 /**
  * @author Jordan Abraham
  */
-class ObjStorage : AsyncStorage<Obj>()
+class ObjStorage(
+    database: String
+) : AsyncStorage(database)

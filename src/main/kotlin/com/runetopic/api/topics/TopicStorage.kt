@@ -1,8 +1,10 @@
 package com.runetopic.api.topics
 
-import com.runetopic.api.AsyncStorage
+import com.runetopic.mongodb.AsyncStorage
 
 /**
  * @author Jordan Abraham
  */
-class TopicStorage : AsyncStorage<Topic>()
+class TopicStorage(
+    database: String
+) : AsyncStorage(database)

@@ -1,11 +1,11 @@
 package com.runetopic.api.tools.npc
 
-import com.runetopic.api.AsyncService
-import org.koin.core.component.inject
+import com.runetopic.mongodb.AsyncService
+import com.runetopic.mongodb.AsyncStorage
 
 /**
  * @author Jordan Abraham
  */
-class NpcService : AsyncService<NpcStorage>() {
-    override fun storage() = inject<NpcStorage>().value
-}
+class NpcService(
+    storage: AsyncStorage
+) : AsyncService(storage)

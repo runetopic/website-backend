@@ -25,10 +25,10 @@ fun Application.configureRegistrationRouting() {
             val registration = call.receive<Registration>()
             if (userService.exists<User>(User::username eq registration.username)) throw UsernameExistsException()
             val user = User(
-                registration.username,
-                BCrypt.hashpw(registration.password, BCrypt.gensalt(12)),
-                registration.email,
-                registration.dateOfBirth
+                username = registration.username,
+                password = BCrypt.hashpw(registration.password, BCrypt.gensalt(12)),
+                email = registration.email,
+                dateOfBirth = registration.dateOfBirth
             )
             if (userService.add(user)) call.respond(HttpStatusCode.Created)
         }

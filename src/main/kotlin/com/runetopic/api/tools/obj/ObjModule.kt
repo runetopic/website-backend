@@ -6,6 +6,5 @@ import org.koin.dsl.module
  * @author Jordan Abraham
  */
 fun objModule() = module {
-    single { ObjStorage() }
-    single { ObjService() }
+    single { ObjService(ObjStorage("api")) }
 }

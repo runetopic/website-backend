@@ -3,8 +3,9 @@ package com.runetopic.user
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.runetopic.TestEnvironment
 import com.runetopic.TestEnvironment.JWT_TOKEN
+import com.runetopic.api.topics.Topic
 import com.runetopic.api.user.User
-import com.runetopic.api.user.UserStorage
+import com.runetopic.api.user.UserService
 import com.runetopic.plugins.loginToken
 import io.ktor.http.*
 import io.ktor.server.testing.*
@@ -13,6 +14,7 @@ import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
 import org.koin.ktor.ext.inject
+import org.litote.kmongo.newId
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -26,8 +28,8 @@ class UserControllerTest {
     fun `clear topic storage`() {
         withTestApplication(TestEnvironment) {
             runBlocking {
-                with(application.inject<UserStorage>()) {
-                    if (this.value.countDocuments<User>() != 0L) {
+                with(application.inject<UserService>()) {
+                    if (this.value.count<User>() != 0L) {
                         this.value.drop<User>()
                     }
                 }
@@ -38,15 +40,16 @@ class UserControllerTest {
     @Test
     fun `test get user details`() = withTestApplication(TestEnvironment) {
         val user = mockk<User>()
+        every { user.uuid } returns newId<Topic>().toString()
         every { user.username } returns "test"
         every { user.email } returns "test"
         every { user.dateOfBirth } returns "1/1/1111"
         every { user.password } returns "test"
 
-        val userStorage by application.inject<UserStorage>()
+        val userService by application.inject<UserService>()
 
         runBlocking {
-            userStorage.insertOne(user)
+            userService.add(user)
         }
 
         with(
@@ -59,8 +62,8 @@ class UserControllerTest {
             assertEquals(HttpStatusCode.OK, response.status())
             assertEquals(
                 "{\n" +
-                    "  \"email\" : \"${user.email}\",\n" +
-                    "  \"username\" : \"${user.username}\"\n" +
+                    "  \"username\" : \"${user.email}\",\n" +
+                    "  \"email\" : \"${user.username}\"\n" +
                     "}",
                 response.content
             )

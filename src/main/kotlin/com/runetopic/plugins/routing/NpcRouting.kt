@@ -19,10 +19,9 @@ fun Application.configureNpcRouting() {
         authenticate(Authentications.LOGGED_IN) {
             get("/api/tools/npcs") {
                 val sorted = call.request.queryParameters["sorted"] == true.toString()
-                if (sorted) {
-                    call.respond(npcService.findSorted(Npc::id))
-                } else {
-                    call.respond(npcService.find<Npc>())
+                when {
+                    sorted -> call.respond(npcService.findSorted(Npc::id))
+                    else -> call.respond(npcService.find<Npc>())
                 }
             }
             post("/api/tools/npcs") {

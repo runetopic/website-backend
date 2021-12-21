@@ -1,11 +1,11 @@
 package com.runetopic.api.user
 
-import com.runetopic.api.AsyncService
-import org.koin.core.component.inject
+import com.runetopic.mongodb.AsyncService
+import com.runetopic.mongodb.AsyncStorage
 
 /**
  * @author Jordan Abraham
  */
-class UserService : AsyncService<UserStorage>() {
-    override fun storage() = inject<UserStorage>().value
-}
+class UserService(
+    storage: AsyncStorage
+) : AsyncService(storage)

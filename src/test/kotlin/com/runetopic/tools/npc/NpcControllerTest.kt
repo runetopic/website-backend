@@ -4,7 +4,8 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.runetopic.TestEnvironment
 import com.runetopic.TestEnvironment.JWT_TOKEN
 import com.runetopic.api.tools.npc.Npc
-import com.runetopic.api.tools.npc.NpcStorage
+import com.runetopic.api.tools.npc.NpcService
+import com.runetopic.api.topics.Topic
 import com.runetopic.plugins.loginToken
 import io.ktor.application.*
 import io.ktor.http.*
@@ -15,6 +16,7 @@ import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.runBlocking
 import org.koin.ktor.ext.inject
+import org.litote.kmongo.newId
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -28,8 +30,8 @@ class NpcControllerTest {
     fun `clear npc storage`() {
         withTestApplication(TestEnvironment) {
             runBlocking {
-                with(application.inject<NpcStorage>()) {
-                    if (this.value.countDocuments<Npc>() != 0L) {
+                with(application.inject<NpcService>()) {
+                    if (this.value.count<Npc>() != 0L) {
                         this.value.drop<Npc>()
                     }
                 }
@@ -59,6 +61,7 @@ class NpcControllerTest {
     @Test
     fun `test post npc`() = withTestApplication(TestEnvironment) {
         val npc = mockk<Npc>()
+        every { npc.uuid } returns newId<Topic>().toString()
         every { npc.id } returns 1
         every { npc.name } returns "Hans"
 
@@ -78,6 +81,7 @@ class NpcControllerTest {
     @Test
     fun `test get npcs`() = withTestApplication(TestEnvironment) {
         val npc = mockk<Npc>()
+        every { npc.uuid } returns newId<Topic>().toString()
         every { npc.id } returns 1
         every { npc.name } returns "Hans"
 

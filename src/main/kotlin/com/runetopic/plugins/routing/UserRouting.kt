@@ -14,6 +14,7 @@ import org.koin.ktor.ext.inject
 import org.litote.kmongo.eq
 
 fun Application.configureUserRouting() {
+
     val userService by inject<UserService>()
 
     routing {
@@ -22,7 +23,7 @@ fun Application.configureUserRouting() {
                 val principal = call.principal<JWTPrincipal>()
                 val username = principal!!.payload.getClaim("username").asString()
                 val user = userService.findBy<User>(User::username eq username) ?: throw InvalidUsernameOrPasswordException()
-                call.respond(HttpStatusCode.OK, hashMapOf("username" to user.username, "email" to user.email))
+                call.respond(HttpStatusCode.OK, mapOf("username" to user.username, "email" to user.email))
             }
         }
     }

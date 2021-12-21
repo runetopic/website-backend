@@ -1,4 +1,4 @@
-package com.runetopic.api
+package com.runetopic.mongodb
 
 import com.mongodb.ConnectionString
 import com.mongodb.MongoClientSettings

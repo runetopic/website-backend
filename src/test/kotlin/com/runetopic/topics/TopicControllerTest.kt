@@ -4,7 +4,7 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.runetopic.TestEnvironment
 import com.runetopic.TestEnvironment.JWT_TOKEN
 import com.runetopic.api.topics.Topic
-import com.runetopic.api.topics.TopicStorage
+import com.runetopic.api.topics.TopicService
 import com.runetopic.plugins.loginToken
 import io.ktor.http.*
 import io.ktor.server.testing.*
@@ -29,8 +29,8 @@ class TopicControllerTest {
     fun `clear topic storage`() {
         withTestApplication(TestEnvironment) {
             runBlocking {
-                with(application.inject<TopicStorage>()) {
-                    if (this.value.countDocuments<Topic>() != 0L) {
+                with(application.inject<TopicService>()) {
+                    if (this.value.count<Topic>() != 0L) {
                         this.value.drop<Topic>()
                     }
                 }
@@ -53,7 +53,7 @@ class TopicControllerTest {
     @Test
     fun `test post topic`() = withTestApplication(TestEnvironment) {
         val topic = mockk<Topic>()
-        every { topic.id } returns newId<Topic>().toString()
+        every { topic.uuid } returns newId<Topic>().toString()
         every { topic.title } returns "Test Title"
         every { topic.description } returns "Test Description"
         every { topic.markdown } returns "<h1></h1>"
@@ -75,7 +75,7 @@ class TopicControllerTest {
     @Test
     fun `test get topics`() = withTestApplication(TestEnvironment) {
         val topic = mockk<Topic>()
-        every { topic.id } returns newId<Topic>().toString()
+        every { topic.uuid } returns newId<Topic>().toString()
         every { topic.title } returns "Test Title"
         every { topic.description } returns "Test Description"
         every { topic.markdown } returns "<h1></h1>"
@@ -93,28 +93,28 @@ class TopicControllerTest {
 
         confirmVerified()
 
-        println(topic.id)
+        println(topic.uuid)
 
         with(
-            handleRequest(HttpMethod.Get, "/api/topics/${topic.id}") {
+            handleRequest(HttpMethod.Get, "/api/topics/${topic.uuid}") {
                 addHeader("Authorization", "Bearer ${loginToken("test", JWT_TOKEN)}")
             }
         ) {
             assertEquals(jacksonObjectMapper().readValue(response.content, Topic::class.java), topic)
             assertEquals(HttpStatusCode.OK, response.status())
         }
-        verify { topic.id }
+        verify { topic.uuid }
 
         confirmVerified()
 
         with(
-            handleRequest(HttpMethod.Put, "/api/topics/${topic.id}") {
+            handleRequest(HttpMethod.Put, "/api/topics/${topic.uuid}") {
                 addHeader("Authorization", "Bearer ${loginToken("test", JWT_TOKEN)}")
                 addHeader(HttpHeaders.ContentType, "application/json")
                 setBody(
                     jacksonObjectMapper().writeValueAsString(
                         Topic(
-                            topic.id,
+                            topic.uuid,
                             "Changed Title Test",
                             topic.description,
                             topic.markdown,
@@ -126,7 +126,7 @@ class TopicControllerTest {
         ) {
             with(jacksonObjectMapper().readValue(response.content, Topic::class.java)) {
                 assertNotEquals(topic.title, title)
-                assertEquals(topic.id, id)
+                assertEquals(topic.uuid, uuid)
                 assertEquals(topic.description, description)
                 assertEquals(topic.markdown, markdown)
                 assertEquals(topic.private, private)
@@ -134,7 +134,7 @@ class TopicControllerTest {
             }
         }
 
-        verify { topic.id }
+        verify { topic.uuid }
         verify { topic.title }
         verify { topic.description }
         verify { topic.markdown }
