@@ -29,4 +29,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CI: true
         uses: gradle/gradle-build-action@v2
-        run: ./gradlew build test --info
+        with:
+          gradle-version: 7.3
+          arguments: build
