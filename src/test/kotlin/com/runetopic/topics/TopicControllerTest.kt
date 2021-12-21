@@ -126,7 +126,7 @@ class TopicControllerTest {
             }
         ) {
             with(jacksonObjectMapper().readValue(response.content, Topic::class.java)) {
-                assertNotEquals(topic.title, title)
+                assertEquals(topic.title, title)
                 assertEquals(topic.id, id)
                 assertEquals(topic.description, description)
                 assertEquals(topic.markdown, markdown)
