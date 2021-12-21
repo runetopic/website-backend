@@ -15,6 +15,7 @@ import io.mockk.verify
 import kotlinx.coroutines.runBlocking
 import org.koin.ktor.ext.inject
 import org.litote.kmongo.newId
+import java.util.*
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -58,6 +59,7 @@ class TopicControllerTest {
         every { topic.description } returns "Test Description"
         every { topic.markdown } returns "<h1></h1>"
         every { topic.private } returns false
+        every { topic.createDate } returns Date()
 
         with(
             handleRequest(HttpMethod.Post, "/api/topics") {
@@ -80,6 +82,7 @@ class TopicControllerTest {
         every { topic.description } returns "Test Description"
         every { topic.markdown } returns "<h1></h1>"
         every { topic.private } returns false
+        every { topic.createDate } returns Date()
 
         with(
             handleRequest(HttpMethod.Post, "/api/topics") {
@@ -92,8 +95,6 @@ class TopicControllerTest {
         }
 
         confirmVerified()
-
-        println(topic.uuid)
 
         with(
             handleRequest(HttpMethod.Get, "/api/topics/${topic.uuid}") {
@@ -118,7 +119,8 @@ class TopicControllerTest {
                             "Changed Title Test",
                             topic.description,
                             topic.markdown,
-                            topic.private
+                            topic.private,
+                            topic.createDate
                         )
                     )
                 )

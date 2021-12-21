@@ -32,7 +32,7 @@ fun Application.configureTopicRouting() {
                 val uuid = call.parameters["uuid"]!!
                 val topic = with(call.receive<Topic>()) {
                     // Retain the uuid of the topic.
-                    Topic(uuid, title, description, markdown, private)
+                    Topic(uuid, title, description, markdown, private, createDate)
                 }
                 if (topicService.update(Topic::uuid eq uuid, topic)) call.respond(HttpStatusCode.Accepted, topic)
             }
