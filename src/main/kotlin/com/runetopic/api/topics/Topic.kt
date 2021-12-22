@@ -1,17 +1,25 @@
 package com.runetopic.api.topics
 
+import com.fasterxml.jackson.annotation.JsonFormat
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer
 import com.runetopic.mongodb.Document
+import org.bson.codecs.pojo.annotations.BsonId
+import org.litote.kmongo.Id
 import org.litote.kmongo.newId
-import java.util.*
+import java.time.ZonedDateTime
 
 /**
  * @author Jordan Abraham
  */
 data class Topic(
-    override val uuid: String = newId<Topic>().toString(),
+    @BsonId
+    @JsonSerialize(using = ToStringSerializer::class)
+    val uuid: Id<Topic> = newId(),
     val title: String,
     val description: String,
     val markdown: String,
     val private: Boolean,
-    val createDate: Date = Date()
-) : Document(uuid)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss.SSSZ")
+    val createDate: ZonedDateTime = ZonedDateTime.now()
+) : Document

@@ -12,6 +12,7 @@ import io.ktor.response.*
 import io.ktor.routing.*
 import org.koin.ktor.ext.inject
 import org.litote.kmongo.eq
+import org.litote.kmongo.toId
 
 fun Application.configureTopicRouting() {
 
@@ -20,7 +21,7 @@ fun Application.configureTopicRouting() {
     routing {
         get("/api/topics") { call.respond(topicService.find<Topic>()) }
         get("/api/topics/{uuid}") {
-            val uuid = call.parameters["uuid"]!!
+            val uuid = call.parameters["uuid"]!!.toId<Topic>()
             call.respond(HttpStatusCode.OK, topicService.findBy<Topic>(Topic::uuid eq uuid) ?: throw BadRequestException("Couldn't find Topic with uuid $uuid"))
         }
         authenticate(Authentications.LOGGED_IN) {
@@ -29,7 +30,7 @@ fun Application.configureTopicRouting() {
                 if (topicService.add(topic)) call.respond(HttpStatusCode.Created, topic)
             }
             put("/api/topics/{uuid}") {
-                val uuid = call.parameters["uuid"]!!
+                val uuid = call.parameters["uuid"]!!.toId<Topic>()
                 val topic = with(call.receive<Topic>()) {
                     // Retain the uuid of the topic.
                     Topic(uuid, title, description, markdown, private, createDate)

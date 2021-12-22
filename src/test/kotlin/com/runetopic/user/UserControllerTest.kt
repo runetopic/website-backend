@@ -1,11 +1,10 @@
 package com.runetopic.user
 
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.runetopic.TestEnvironment
 import com.runetopic.TestEnvironment.JWT_TOKEN
-import com.runetopic.api.topics.Topic
 import com.runetopic.api.user.User
 import com.runetopic.api.user.UserService
+import com.runetopic.testJacksonObjectMapper
 import com.runetopic.plugins.loginToken
 import io.ktor.http.*
 import io.ktor.server.testing.*
@@ -40,7 +39,7 @@ class UserControllerTest {
     @Test
     fun `test get user details`() = withTestApplication(TestEnvironment) {
         val user = mockk<User>()
-        every { user.uuid } returns newId<Topic>().toString()
+        every { user.uuid } returns newId()
         every { user.username } returns "test"
         every { user.email } returns "test"
         every { user.dateOfBirth } returns "1/1/1111"
@@ -56,7 +55,7 @@ class UserControllerTest {
             handleRequest(HttpMethod.Get, "/api/user/details") {
                 addHeader("Authorization", "Bearer ${loginToken("test", JWT_TOKEN)}")
                 addHeader(HttpHeaders.ContentType, "application/json")
-                setBody(jacksonObjectMapper().writeValueAsString("user"))
+                setBody(testJacksonObjectMapper().writeValueAsString("user"))
             }
         ) {
             assertEquals(HttpStatusCode.OK, response.status())

@@ -39,10 +39,13 @@ dependencies {
     implementation("io.ktor:ktor-jackson:$ktor_version")
     implementation("ch.qos.logback:logback-classic:$logback_version")
 
+    implementation("org.litote.kmongo:kmongo:$kmongo_version")
     implementation("org.litote.kmongo:kmongo-async:$kmongo_version")
     implementation("org.litote.kmongo:kmongo-coroutine:$kmongo_version")
     implementation("org.litote.kmongo:kmongo-reactor:$kmongo_version")
     implementation("org.litote.kmongo:kmongo-id:$kmongo_version")
+
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13")
 
     implementation("io.insert-koin:koin-core:$koin_version")
     implementation("io.insert-koin:koin-ktor:$koin_version")

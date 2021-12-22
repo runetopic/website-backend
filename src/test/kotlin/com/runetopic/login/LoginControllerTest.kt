@@ -1,8 +1,8 @@
 package com.runetopic.login
 
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.runetopic.TestEnvironment
 import com.runetopic.api.login.LoginCredentials
+import com.runetopic.testJacksonObjectMapper
 import io.ktor.http.*
 import io.ktor.server.testing.*
 import io.mockk.every
@@ -24,7 +24,7 @@ class LoginControllerTest {
         with(
             handleRequest(HttpMethod.Post, "/api/login") {
                 addHeader(HttpHeaders.ContentType, "application/json")
-                setBody(jacksonObjectMapper().writeValueAsString(credentials))
+                setBody(testJacksonObjectMapper().writeValueAsString(credentials))
             }
         ) {
             assertEquals(HttpStatusCode.Forbidden, response.status())

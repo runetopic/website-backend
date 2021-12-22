@@ -32,6 +32,10 @@ open class AsyncService(
         return storage.findOne(filter)
     }
 
+    suspend inline fun <reified T : Document> findById(id: String): T? {
+        return storage.findOneById(id)
+    }
+
     suspend inline fun <reified T : Document> update(filter: Bson, document: T): Boolean {
         return storage.updateOne(filter, document).wasAcknowledged()
     }

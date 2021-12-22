@@ -1,10 +1,10 @@
 package com.runetopic.topics
 
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.runetopic.TestEnvironment
 import com.runetopic.TestEnvironment.JWT_TOKEN
 import com.runetopic.api.topics.Topic
 import com.runetopic.api.topics.TopicService
+import com.runetopic.testJacksonObjectMapper
 import com.runetopic.plugins.loginToken
 import io.ktor.http.*
 import io.ktor.server.testing.*
@@ -15,7 +15,7 @@ import io.mockk.verify
 import kotlinx.coroutines.runBlocking
 import org.koin.ktor.ext.inject
 import org.litote.kmongo.newId
-import java.util.*
+import java.time.ZonedDateTime
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -54,18 +54,18 @@ class TopicControllerTest {
     @Test
     fun `test post topic`() = withTestApplication(TestEnvironment) {
         val topic = mockk<Topic>()
-        every { topic.uuid } returns newId<Topic>().toString()
+        every { topic.uuid } returns newId()
         every { topic.title } returns "Test Title"
         every { topic.description } returns "Test Description"
         every { topic.markdown } returns "<h1></h1>"
         every { topic.private } returns false
-        every { topic.createDate } returns Date()
+        every { topic.createDate } returns ZonedDateTime.parse("2021-12-22T07:18:25.019Z[UTC]")
 
         with(
             handleRequest(HttpMethod.Post, "/api/topics") {
                 addHeader("Authorization", "Bearer ${loginToken("test", JWT_TOKEN)}")
                 addHeader(HttpHeaders.ContentType, "application/json")
-                setBody(jacksonObjectMapper().writeValueAsString(topic))
+                setBody(testJacksonObjectMapper().writeValueAsString(topic))
             }
         ) {
             assertEquals(HttpStatusCode.Created, response.status())
@@ -77,18 +77,18 @@ class TopicControllerTest {
     @Test
     fun `test get topics`() = withTestApplication(TestEnvironment) {
         val topic = mockk<Topic>()
-        every { topic.uuid } returns newId<Topic>().toString()
+        every { topic.uuid } returns newId()
         every { topic.title } returns "Test Title"
         every { topic.description } returns "Test Description"
         every { topic.markdown } returns "<h1></h1>"
         every { topic.private } returns false
-        every { topic.createDate } returns Date()
+        every { topic.createDate } returns ZonedDateTime.parse("2021-12-22T07:18:25.019Z[UTC]")
 
         with(
             handleRequest(HttpMethod.Post, "/api/topics") {
                 addHeader("Authorization", "Bearer ${loginToken("test", JWT_TOKEN)}")
                 addHeader(HttpHeaders.ContentType, "application/json")
-                setBody(jacksonObjectMapper().writeValueAsString(topic))
+                setBody(testJacksonObjectMapper().writeValueAsString(topic))
             }
         ) {
             assertEquals(HttpStatusCode.Created, response.status())
@@ -101,7 +101,7 @@ class TopicControllerTest {
                 addHeader("Authorization", "Bearer ${loginToken("test", JWT_TOKEN)}")
             }
         ) {
-            assertEquals(jacksonObjectMapper().readValue(response.content, Topic::class.java), topic)
+            assertEquals(testJacksonObjectMapper().readValue(response.content, Topic::class.java), topic)
             assertEquals(HttpStatusCode.OK, response.status())
         }
         verify { topic.uuid }
@@ -113,7 +113,7 @@ class TopicControllerTest {
                 addHeader("Authorization", "Bearer ${loginToken("test", JWT_TOKEN)}")
                 addHeader(HttpHeaders.ContentType, "application/json")
                 setBody(
-                    jacksonObjectMapper().writeValueAsString(
+                    testJacksonObjectMapper().writeValueAsString(
                         Topic(
                             topic.uuid,
                             "Changed Title Test",
@@ -126,7 +126,7 @@ class TopicControllerTest {
                 )
             }
         ) {
-            with(jacksonObjectMapper().readValue(response.content, Topic::class.java)) {
+            with(testJacksonObjectMapper().readValue(response.content, Topic::class.java)) {
                 assertNotEquals(topic.title, title)
                 assertEquals(topic.uuid, uuid)
                 assertEquals(topic.description, description)

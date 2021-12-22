@@ -1,7 +1,12 @@
 package com.runetopic
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.SerializationFeature
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import io.ktor.application.*
 import io.ktor.config.*
+import org.litote.kmongo.id.jackson.IdJacksonModule
 
 object TestEnvironment : (Application) -> Unit {
 
@@ -19,3 +24,8 @@ object TestEnvironment : (Application) -> Unit {
         application.module()
     }
 }
+
+fun testJacksonObjectMapper(): ObjectMapper = jacksonObjectMapper()
+    .registerModule(IdJacksonModule())
+    .registerModule(JavaTimeModule())
+    .enable(SerializationFeature.INDENT_OUTPUT)

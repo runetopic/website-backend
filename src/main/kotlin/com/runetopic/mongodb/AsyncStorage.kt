@@ -24,6 +24,10 @@ open class AsyncStorage(
         return database.getCollection<T>().findOne(filter)
     }
 
+    suspend inline fun <reified T : Document> findOneById(id: Any): T? {
+        return database.getCollection<T>().findOneById(id)
+    }
+
     suspend inline fun <reified T : Document> find(): List<T> {
         return database.getCollection<T>().find().toList()
     }

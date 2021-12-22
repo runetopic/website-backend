@@ -1,11 +1,10 @@
 package com.runetopic.tools.npc
 
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.runetopic.TestEnvironment
 import com.runetopic.TestEnvironment.JWT_TOKEN
 import com.runetopic.api.tools.npc.Npc
 import com.runetopic.api.tools.npc.NpcService
-import com.runetopic.api.topics.Topic
+import com.runetopic.testJacksonObjectMapper
 import com.runetopic.plugins.loginToken
 import io.ktor.application.*
 import io.ktor.http.*
@@ -61,7 +60,7 @@ class NpcControllerTest {
     @Test
     fun `test post npc`() = withTestApplication(TestEnvironment) {
         val npc = mockk<Npc>()
-        every { npc.uuid } returns newId<Topic>().toString()
+        every { npc.uuid } returns newId()
         every { npc.id } returns 1
         every { npc.name } returns "Hans"
 
@@ -69,7 +68,7 @@ class NpcControllerTest {
             handleRequest(HttpMethod.Post, "/api/tools/npcs") {
                 addHeader("Authorization", "Bearer ${loginToken("test", JWT_TOKEN)}")
                 addHeader(HttpHeaders.ContentType, "application/json")
-                setBody(jacksonObjectMapper().writeValueAsString(npc))
+                setBody(testJacksonObjectMapper().writeValueAsString(npc))
             }
         ) {
             assertEquals(HttpStatusCode.Created, response.status())
@@ -81,7 +80,7 @@ class NpcControllerTest {
     @Test
     fun `test get npcs`() = withTestApplication(TestEnvironment) {
         val npc = mockk<Npc>()
-        every { npc.uuid } returns newId<Topic>().toString()
+        every { npc.uuid } returns newId()
         every { npc.id } returns 1
         every { npc.name } returns "Hans"
 
@@ -89,7 +88,7 @@ class NpcControllerTest {
             handleRequest(HttpMethod.Post, "/api/tools/npcs") {
                 addHeader("Authorization", "Bearer ${loginToken("test", JWT_TOKEN)}")
                 addHeader(HttpHeaders.ContentType, "application/json")
-                setBody(jacksonObjectMapper().writeValueAsString(npc))
+                setBody(testJacksonObjectMapper().writeValueAsString(npc))
             }
         ) {
             assertEquals(HttpStatusCode.Created, response.status())
@@ -100,7 +99,7 @@ class NpcControllerTest {
                 addHeader("Authorization", "Bearer ${loginToken("test", JWT_TOKEN)}")
             }
         ) {
-            with(jacksonObjectMapper().readValue(response.content, Array<Npc>::class.java).first()) {
+            with(testJacksonObjectMapper().readValue(response.content, Array<Npc>::class.java).first()) {
                 assertEquals(npc.id, id)
                 assertEquals(npc.name, name)
             }
