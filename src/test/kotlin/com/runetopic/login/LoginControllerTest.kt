@@ -8,7 +8,6 @@ import io.ktor.http.*
 import io.ktor.server.testing.*
 import io.mockk.every
 import io.mockk.mockk
-import org.slf4j.Marker
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.time.measureTime

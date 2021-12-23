@@ -25,8 +25,7 @@ fun Application.configureObjRouting() {
                 }
             }
             post("/api/tools/objs") {
-                val obj = call.receive<Obj>()
-                objService.add(obj)
+                objService.add(call.receive<Obj>())
                 call.respond(HttpStatusCode.Created)
             }
         }

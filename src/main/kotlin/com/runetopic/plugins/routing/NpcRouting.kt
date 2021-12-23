@@ -25,8 +25,7 @@ fun Application.configureNpcRouting() {
                 }
             }
             post("/api/tools/npcs") {
-                val npc = call.receive<Npc>()
-                if (npcService.add(npc)) call.respond(HttpStatusCode.Created)
+                if (npcService.add(call.receive<Npc>())) call.respond(HttpStatusCode.Created)
             }
         }
     }
