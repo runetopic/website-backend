@@ -2,6 +2,9 @@
 The backend of the RuneTopic website.
 
 ## Example Configuration
+For security reasons, we do not push our own. You will have to setup your own configuration file like the example provided below.
+
+```/resource/application.conf```
 ```
 ktor {
     development = true
@@ -16,7 +19,7 @@ ktor {
 }
 
 jwt {
-    secret = (JWT_SECRET_KEY)
+    secret = a-generated-token-goes-here
 }
 
 mongodb {
