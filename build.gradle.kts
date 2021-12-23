@@ -15,7 +15,7 @@ group = "com.runetopic.website"
 version = "1.0.0-SNAPSHOT"
 
 application {
-    mainClass.set("com.runetopic.ApplicationKt")
+    mainClass.set("io.ktor.server.netty.EngineMain")
 }
 
 repositories(RepositoryHandler::mavenCentral)
@@ -66,7 +66,7 @@ tasks {
     }
     shadowJar {
         manifest {
-            attributes(Pair("Main-Class", "com.runetopic.ApplicationKt"))
+            attributes(Pair("Main-Class", "io.ktor.server.netty.EngineMain"))
         }
     }
 }

@@ -6,8 +6,6 @@ import io.ktor.application.*
 import io.ktor.server.netty.*
 import java.util.*
 
-fun main(args: Array<String>) = EngineMain.main(args)
-
 fun Application.module() {
     TimeZone.setDefault(TimeZone.getTimeZone("UTC"))
     installDefaultHeaders()
@@ -17,6 +15,5 @@ fun Application.module() {
     installJacksonContentNegotiation()
     installJWT()
     installKoin()
-//    installDataConversion()
     configureRouting()
 }
