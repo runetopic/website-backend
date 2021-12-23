@@ -3,6 +3,8 @@ val logbackVersion: String by project
 val koinVersion: String by project
 val mockkVersion: String by project
 val kmongoVersion: String by project
+val jacksonVersion: String by project
+val argon2Version: String by project
 
 plugins {
     kotlin("jvm") version "1.6.10"
@@ -22,6 +24,7 @@ repositories(RepositoryHandler::mavenCentral)
 
 dependencies {
     implementation(kotlin("stdlib"))
+    // Ktor Dependencies
     implementation("io.ktor:ktor-server-core:$ktorVersion")
     implementation("io.ktor:ktor-server-netty:$ktorVersion")
     implementation("io.ktor:ktor-auth:$ktorVersion")
@@ -30,16 +33,20 @@ dependencies {
     implementation("io.ktor:ktor-jackson:$ktorVersion")
     implementation("ch.qos.logback:logback-classic:$logbackVersion")
 
+    // Koin Dependencies
+    implementation("io.insert-koin:koin-core:$koinVersion")
+    implementation("io.insert-koin:koin-ktor:$koinVersion")
+
+    // KMongo Dependencies
     implementation("org.litote.kmongo:kmongo:$kmongoVersion")
     implementation("org.litote.kmongo:kmongo-async:$kmongoVersion")
     implementation("org.litote.kmongo:kmongo-coroutine:$kmongoVersion")
     implementation("org.litote.kmongo:kmongo-reactor:$kmongoVersion")
     implementation("org.litote.kmongo:kmongo-id:$kmongoVersion")
 
-    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.1")
-
-    implementation("io.insert-koin:koin-core:$koinVersion")
-    implementation("io.insert-koin:koin-ktor:$koinVersion")
+    // Misc Dependencies
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jacksonVersion")
+    implementation("de.mkammerer:argon2-jvm:$argon2Version")
 }
 
 tasks.withType<Test> {

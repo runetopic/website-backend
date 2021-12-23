@@ -5,6 +5,7 @@ import com.runetopic.api.tools.obj.objModule
 import com.runetopic.api.topics.topicModule
 import com.runetopic.api.user.userModule
 import com.runetopic.mongodb.MongoClient
+import de.mkammerer.argon2.Argon2Factory
 import io.ktor.application.*
 import org.koin.dsl.module
 import org.koin.ktor.ext.Koin
@@ -12,7 +13,12 @@ import org.koin.ktor.ext.Koin
 fun Application.installKoin() {
     install(Koin) {
         modules(
-            module { single { MongoClient(this@installKoin) } },
+            // Misc module.
+            module {
+                single { MongoClient(this@installKoin) }
+                single { Argon2Factory.create() }
+            },
+            // Core modules.
             objModule(),
             npcModule(),
             topicModule(),
