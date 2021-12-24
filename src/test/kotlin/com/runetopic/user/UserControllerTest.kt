@@ -15,6 +15,7 @@ import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
 import org.koin.ktor.ext.inject
 import org.litote.kmongo.newId
+import java.time.ZonedDateTime
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -48,6 +49,7 @@ class UserControllerTest {
             every { user.email } returns "test"
             every { user.dateOfBirth } returns "1/1/1111"
             every { user.password } returns "test"
+            every { user.createDate } returns ZonedDateTime.parse("2021-12-24T07:18:25.019Z[UTC]")
 
             val userService by application.inject<UserService>()
 

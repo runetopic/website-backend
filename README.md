@@ -7,6 +7,7 @@
 - Koin (https://github.com/InsertKoinIO/koin)
 - KMongo (https://github.com/Litote/kmongo)
 - Jackson (https://github.com/FasterXML/jackson)
+- Docker Compose (https://github.com/docker/compose)
 
 ## Example Configuration
 For security reasons, we do not push our own. You will have to setup your own configuration file like the example provided below.
