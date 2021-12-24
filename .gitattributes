@@ -1,3 +1,2 @@
 *.yml linguist-detectable
 *.toml linguist-detectable
-*.xml linguist-detectable
