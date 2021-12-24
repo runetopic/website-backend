@@ -1,0 +1,32 @@
+version: "3.9"
+
+services:
+  mongod:
+    image: mongo
+    restart: unless-stopped
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    networks:
+      - backend
+    deploy:
+      resources:
+        limits:
+          cpus: "0.1"
+  app:
+    build: ./
+    container_name: website-backend
+    expose:
+      - 8081
+    ports:
+      - "8081:8081"
+    networks:
+      - backend
+    deploy:
+      resources:
+        limits:
+          cpus: "0.1"
+
+networks:
+  backend:
+    driver: bridge
