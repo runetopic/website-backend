@@ -12,4 +12,5 @@ fun Application.configureRouting() {
     configureTopicRouting()
     configureLoginRouting()
     configureObjRouting()
+    configureShopRouting()
 }

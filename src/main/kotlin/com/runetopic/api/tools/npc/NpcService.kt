@@ -8,4 +8,13 @@ import com.runetopic.mongodb.AsyncStorage
  */
 class NpcService(
     storage: AsyncStorage
-) : AsyncService(storage)
+) : AsyncService(storage) {
+
+    suspend fun getNPCSpawns189(): List<NPCSpawns189> {
+        return getCollection<NPCSpawns189>()
+            .find()
+            .batchSize(5000)
+            .descendingSort(NPCSpawns189::id)
+            .toList()
+    }
+}

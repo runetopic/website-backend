@@ -2,6 +2,7 @@ package com.runetopic.plugins
 
 import com.runetopic.api.tools.npc.npcModule
 import com.runetopic.api.tools.obj.objModule
+import com.runetopic.api.tools.shop.shopModule
 import com.runetopic.api.topics.topicModule
 import com.runetopic.api.user.userModule
 import com.runetopic.mongodb.MongoClient
@@ -22,7 +23,8 @@ fun Application.installKoin() {
             objModule(),
             npcModule(),
             topicModule(),
-            userModule()
+            userModule(),
+            shopModule()
         )
     }
 }

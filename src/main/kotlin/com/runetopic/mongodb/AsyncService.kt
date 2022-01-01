@@ -3,7 +3,9 @@ package com.runetopic.mongodb
 import com.mongodb.client.model.CountOptions
 import org.bson.conversions.Bson
 import org.koin.core.component.KoinComponent
+import org.koin.core.component.get
 import org.litote.kmongo.EMPTY_BSON
+import org.litote.kmongo.coroutine.CoroutineCollection
 
 /**
  * @author Jordan Abraham
@@ -16,8 +18,16 @@ open class AsyncService(
         return storage.insertOne(document).wasAcknowledged()
     }
 
+    suspend inline fun <reified T : Document> insertMany(document: Array<T>): Boolean {
+        return storage.insertMany(document).wasAcknowledged()
+    }
+
     suspend inline fun <reified T : Document> find(): List<T> {
         return storage.find()
+    }
+
+    inline fun <reified T : Document> getCollection(): CoroutineCollection<T> {
+        return storage.getCollection()
     }
 
     suspend inline fun <reified T : Document, R : Comparable<R>> findSorted(crossinline selector: (T) -> R?): List<T> {
